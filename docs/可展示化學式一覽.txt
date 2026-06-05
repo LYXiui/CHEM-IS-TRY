@@ -1,0 +1,98 @@
+CHEM-IS-TRY — 可展示化學式一覽（自動產生）
+================================================
+產生時間：2026-06-05
+資料來源：docbrown.info、chem.fsu.edu、Pearson、Shiksha Class 10、專案 compounds/reactions
+驗證：npm run test:formulas
+
+圖例：✓ 專案可用　△ 僅參考未實作　✗ 資料錯誤
+液體規則：所有 liquid 試劑與 Br、Hg 等液態元素須先放置燒杯
+
+【溶劑】
+✓  H₂O             水／蒸餾水         試劑架（液體→須燒杯）
+
+【酸】
+✓  HCl(aq)         鹽酸            試劑架（液體→須燒杯）
+✓  H₂SO₄(濃)        濃硫酸           試劑架（液體→須燒杯）
+✓  H₂SO₄(稀)        稀硫酸           試劑架（液體→須燒杯）
+✓  HNO₃            硝酸            試劑架（液體→須燒杯）
+✓  H₃PO₄(稀)        磷酸            試劑架（液體→須燒杯）
+✓  H₂SO₄           硫酸            反應可解鎖
+△  H₂CO₃           碳酸            尚未內建為試劑／產物（水溶液中不稳定，以 CO₂ 水溶液示意）
+
+【有機酸】
+✓  CH₃COOH         乙酸            試劑架（液體→須燒杯）
+
+【鹼】
+✓  NaOH(aq)        氫氧化鈉          試劑架（液體→須燒杯）
+✓  KOH(aq)         氫氧化鉀          試劑架（液體→須燒杯）
+✓  Ca(OH)₂(aq)     澄清石灰水         試劑架（液體→須燒杯）
+
+【鹽】
+✓  AgNO₃(aq)       硝酸銀           試劑架（液體→須燒杯）
+✓  NaCl(aq)        氯化鈉溶液         試劑架（液體→須燒杯）
+✓  CuSO₄(aq)       硫酸銅           試劑架（液體→須燒杯）
+✓  FeCl₃(aq)       氯化鐵           試劑架（液體→須燒杯）
+✓  FeSO₄(aq)       硫酸亞鐵          試劑架（液體→須燒杯）
+✓  BaCl₂(aq)       氯化鋇           試劑架（液體→須燒杯）
+✓  ZnSO₄(aq)       硫酸鋅           試劑架（液體→須燒杯）
+✓  Na₂CO₃(aq)      碳酸鈉           試劑架（液體→須燒杯）
+✓  CaCO₃           碳酸鈣           試劑架
+✓  NH₄Cl           氯化銨           試劑架
+✓  KNO₃            硝酸鉀           試劑架
+✓  KClO₃           氯酸鉀           試劑架
+✓  NaCl            氯化鈉           反應可解鎖
+✓  Cu(NO₃)₂        硝酸銅           反應可解鎖
+✓  CaCl₂(aq)       氯化鈣           反應可解鎖
+✓  ZnCl₂           氯化鋅           反應可解鎖
+✓  CH₃COONa        乙酸鈉           反應可解鎖
+✓  NaNO₃           硝酸鈉           反應可解鎖
+✓  FeCl₂(aq)       氯化亞鐵          反應可解鎖
+✓  KCl             氯化鉀           反應可解鎖
+
+【氧化劑】
+✓  KMnO₄(aq)       過錳酸鉀          試劑架（液體→須燒杯）
+✓  H₂O₂(aq)        過氧化氫          試劑架（液體→須燒杯）
+
+【催化劑】
+✓  MnO₂            二氧化錳          試劑架
+
+【有機】
+✓  C₆H₁₂O₆         葡萄糖           試劑架
+✓  CH₄             甲烷            反應可解鎖
+✓  C₂H₅OH          乙醇            反應可解鎖
+
+【指示劑】
+✓  酚酞              指示劑           試劑架（液體→須燒杯）
+✓  石蕊              石蕊            試劑架（液體→須燒杯）
+
+【氣體】
+✓  CO₂             二氧化碳          反應可解鎖
+✓  NH₃             氨             反應可解鎖
+✓  SO₂             二氧化硫          反應可解鎖
+✓  O₃              臭氧            反應可解鎖
+✓  H₂              氫氣            反應可解鎖
+
+【氧化物】
+✓  MgO             氧化鎂           反應可解鎖
+✓  Fe₂O₃           氧化鐵           反應可解鎖
+✓  Al₂O₃           氧化鋁           反應可解鎖
+✓  CuO             氧化銅           反應可解鎖
+
+【沉澱】
+✓  AgCl            氯化銀           反應可解鎖
+✓  BaSO₄           硫酸鋇           反應可解鎖
+✓  CaSO₄           硫酸鈣           反應可解鎖
+✓  PbCl₂           氯化鉛           反應可解鎖
+✓  PbSO₄           硫酸鉛           反應可解鎖
+✓  Cu(OH)₂         氫氧化銅          反應可解鎖
+✓  Fe(OH)₂         氫氧化亞鐵         反應可解鎖
+
+────────────────────────────────────────
+統計：可用 55、參考未實作 1、錯誤 0；專案化合物 508 種
+內建反應鍵：631 組
+
+網站參考：
+- https://www.docbrown.info/page03/AcidsBasesSalts08.htm
+- https://www.chem.fsu.edu/chemlab/chm1045/reactions2.html
+- https://www.pearson.com/channels/general-chemistry/study-guides/reactions-in-aqueous-solutions-electrolytes-precipitation-acids
+- https://shikshanation.com/blog/complete-class-10-chemistry-formulas/

@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+dist-ssr/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.lnk
+*.swp
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Marp / temp
+*.tmp
+~$*.pptx
+
+# Optional: keep pptx in repo — remove line below if you want to track generated pptx
+# presentations/*.pptx

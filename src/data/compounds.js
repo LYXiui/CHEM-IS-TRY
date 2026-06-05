@@ -1,0 +1,67 @@
+import { generatedElementCompounds } from './generated/elementCompounds.js'
+
+/** stock: 試劑架可直接使用；liquid: 溶液視覺 */
+const baseCompounds = [
+  { id: 'h2o', formula: 'H₂O', name: '蒸餾水', elements: ['H', 'O'], desc: '溶劑與清洗', stock: true, liquid: true, tone: '#7dd3fc' },
+  { id: 'h2so4_conc', formula: 'H₂SO₄(濃)', name: '濃硫酸', elements: ['H', 'S', 'O'], desc: '脫水與酯化', stock: true, liquid: true, tone: '#eab308' },
+  { id: 'h2so4_dil', formula: 'H₂SO₄(稀)', name: '稀硫酸', elements: ['H', 'S', 'O'], desc: '酸性反應', stock: true, liquid: true, tone: '#facc15' },
+  { id: 'hno3', formula: 'HNO₃', name: '硝酸', elements: ['H', 'N', 'O'], desc: '溶解銅、銀', stock: true, liquid: true, tone: '#f87171' },
+  { id: 'agno3', formula: 'AgNO₃(aq)', name: '硝酸銀溶液', elements: ['Ag', 'N', 'O'], desc: '檢驗氯離子', stock: true, liquid: true, tone: '#e2e8f0' },
+  { id: 'caco3', formula: 'CaCO₃', name: '碳酸鈣', elements: ['Ca', 'C', 'O'], desc: '石灰石固體', stock: true, liquid: false, tone: '#f5f5f4' },
+  { id: 'hcl', formula: 'HCl(aq)', name: '鹽酸', elements: ['H', 'Cl'], desc: '與碳酸鹽反應', stock: true, liquid: true, tone: '#6ee7b7' },
+  { id: 'naoh', formula: 'NaOH(aq)', name: '氫氧化鈉', elements: ['Na', 'O', 'H'], desc: '強鹼中和', stock: true, liquid: true, tone: '#a78bfa' },
+  { id: 'nacl_aq', formula: 'NaCl(aq)', name: '氯化鈉溶液', elements: ['Na', 'Cl'], desc: '食鹽水', stock: true, liquid: true, tone: '#f8fafc' },
+  { id: 'cuso4_aq', formula: 'CuSO₄(aq)', name: '硫酸銅溶液', elements: ['Cu', 'S', 'O'], desc: '藍色溶液', stock: true, liquid: true, tone: '#38bdf8' },
+  { id: 'fecl3_aq', formula: 'FeCl₃(aq)', name: '氯化鐵溶液', elements: ['Fe', 'Cl'], desc: '黃褐色', stock: true, liquid: true, tone: '#d97706' },
+  { id: 'bacl2_aq', formula: 'BaCl₂(aq)', name: '氯化鋇溶液', elements: ['Ba', 'Cl'], desc: '硫酸根沉澱', stock: true, liquid: true, tone: '#f1f5f9' },
+  { id: 'kmno4_aq', formula: 'KMnO₄(aq)', name: '過錳酸鉀', elements: ['K', 'Mn', 'O'], desc: '紫色氧化劑', stock: true, liquid: true, tone: '#7e22ce' },
+  { id: 'na2co3_aq', formula: 'Na₂CO₃(aq)', name: '碳酸鈉溶液', elements: ['Na', 'C', 'O'], desc: '弱鹼性鹽', stock: true, liquid: true, tone: '#fef3c7' },
+  { id: 'caoh2_aq', formula: 'Ca(OH)₂(aq)', name: '澄清石灰水', elements: ['Ca', 'O', 'H'], desc: '檢驗 CO₂', stock: true, liquid: true, tone: '#ecfccb' },
+  { id: 'h2o2_aq', formula: 'H₂O₂(aq)', name: '過氧化氫', elements: ['H', 'O'], desc: '催化分解', stock: true, liquid: true, tone: '#bae6fd' },
+  { id: 'phenolphthalein', formula: '指示劑', name: '酚酞', elements: ['C', 'H', 'O'], desc: '鹼中呈紅', stock: true, liquid: true, tone: '#fce7f3' },
+  { id: 'litmus', formula: '石蕊', name: '石蕊試液', elements: ['C', 'H', 'O', 'N'], desc: '酸紅鹼藍', stock: true, liquid: true, tone: '#c084fc' },
+  { id: 'koh_aq', formula: 'KOH(aq)', name: '氫氧化鉀', elements: ['K', 'O', 'H'], desc: '強鹼中和', stock: true, liquid: true, tone: '#f9a8d4' },
+  { id: 'h3po4_dil', formula: 'H₃PO₄(稀)', name: '磷酸', elements: ['H', 'P', 'O'], desc: '中強酸', stock: true, liquid: true, tone: '#fdba74' },
+  { id: 'ch3cooh', formula: 'CH₃COOH', name: '乙酸', elements: ['C', 'H', 'O'], desc: '弱酸', stock: true, liquid: true, tone: '#fef9c3' },
+  { id: 'nh4cl', formula: 'NH₄Cl', name: '氯化銨', elements: ['N', 'H', 'Cl'], desc: '銨鹽', stock: true, liquid: false, tone: '#f5f5f4' },
+  { id: 'kno3', formula: 'KNO₃', name: '硝酸鉀', elements: ['K', 'N', 'O'], desc: '固體氧化劑', stock: true, liquid: false, tone: '#fef08a' },
+  { id: 'feso4_aq', formula: 'FeSO₄(aq)', name: '硫酸亞鐵', elements: ['Fe', 'S', 'O'], desc: '淡綠溶液', stock: true, liquid: true, tone: '#86efac' },
+  { id: 'znso4_aq', formula: 'ZnSO₄(aq)', name: '硫酸鋅', elements: ['Zn', 'S', 'O'], desc: '無色溶液', stock: true, liquid: true, tone: '#e2e8f0' },
+  { id: 'kclo3', formula: 'KClO₃', name: '氯酸鉀', elements: ['K', 'Cl', 'O'], desc: '加熱分解', stock: true, liquid: false, tone: '#fef9c3' },
+  { id: 'mno2', formula: 'MnO₂', name: '二氧化錳', elements: ['Mn', 'O'], desc: '過氧化氫催化', stock: true, liquid: false, tone: '#44403c' },
+  { id: 'c6h12o6', formula: 'C₆H₁₂O₆', name: '葡萄糖', elements: ['C', 'H', 'O'], desc: '有機', stock: true, liquid: false, tone: '#fff7ed' },
+
+  { id: 'nacl', formula: 'NaCl', name: '氯化鈉', elements: ['Na', 'Cl'], desc: '離子晶體', stock: false, liquid: false, tone: '#f8fafc' },
+  { id: 'co2', formula: 'CO₂', name: '二氧化碳', elements: ['C', 'O'], desc: '氣體產物', stock: false, liquid: false, tone: '#e0f2fe' },
+  { id: 'mgo', formula: 'MgO', name: '氧化鎂', elements: ['Mg', 'O'], desc: '燃燒產物', stock: false, liquid: false, tone: '#ffffff' },
+  { id: 'fe2o3', formula: 'Fe₂O₃', name: '氧化鐵', elements: ['Fe', 'O'], desc: '鐵鏽', stock: false, liquid: false, tone: '#b45309' },
+  { id: 'nh3', formula: 'NH₃', name: '氨', elements: ['N', 'H'], desc: '刺激性氣體', stock: false, liquid: false, tone: '#dbeafe' },
+  { id: 'ch4', formula: 'CH₄', name: '甲烷', elements: ['C', 'H'], desc: '可燃氣體', stock: false, liquid: false, tone: '#ecfccb' },
+  { id: 'h2so4', formula: 'H₂SO₄', name: '硫酸', elements: ['H', 'S', 'O'], desc: '工業酸', stock: false, liquid: true, tone: '#fef08a' },
+  { id: 'cuo', formula: 'CuO', name: '氧化銅', elements: ['Cu', 'O'], desc: '黑色粉末', stock: false, liquid: false, tone: '#44403c' },
+  { id: 'agcl', formula: 'AgCl', name: '氯化銀', elements: ['Ag', 'Cl'], desc: '白色沉澱', stock: false, liquid: false, tone: '#fafafa' },
+  { id: 'cu_no3', formula: 'Cu(NO₃)₂', name: '硝酸銅', elements: ['Cu', 'N', 'O'], desc: '藍色溶液', stock: false, liquid: true, tone: '#38bdf8' },
+  { id: 'baso4', formula: 'BaSO₄', name: '硫酸鋇', elements: ['Ba', 'S', 'O'], desc: '白色沉澱', stock: false, liquid: false, tone: '#f8fafc' },
+  { id: 'c2h5oh', formula: 'C₂H₅OH', name: '乙醇', elements: ['C', 'H', 'O'], desc: '有機溶劑', stock: false, liquid: true, tone: '#fef3c7' },
+  { id: 'o3', formula: 'O₃', name: '臭氧', elements: ['O'], desc: '強氧化性', stock: false, liquid: false, tone: '#7dd3fc' },
+  { id: 'h2', formula: 'H₂', name: '氫氣', elements: ['H'], desc: '還原性氣體', stock: false, liquid: false, tone: '#f0fdfa' },
+  { id: 'nano3', formula: 'NaNO₃', name: '硝酸鈉', elements: ['Na', 'N', 'O'], desc: '中和產物', stock: false, liquid: false, tone: '#fef9c3' },
+  { id: 'cu_oh2', formula: 'Cu(OH)₂', name: '氫氧化銅', elements: ['Cu', 'O', 'H'], desc: '藍色沉澱', stock: false, liquid: false, tone: '#0ea5e9' },
+  { id: 'fecl2_aq', formula: 'FeCl₂(aq)', name: '氯化亞鐵', elements: ['Fe', 'Cl'], desc: '置換後淺綠色', stock: false, liquid: true, tone: '#84cc16' },
+  { id: 'caso4', formula: 'CaSO₄', name: '硫酸鈣', elements: ['Ca', 'S', 'O'], desc: '微溶白色', stock: false, liquid: false, tone: '#f8fafc' },
+  { id: 'pbcl2', formula: 'PbCl₂', name: '氯化鉛', elements: ['Pb', 'Cl'], desc: '白色沉澱', stock: false, liquid: false, tone: '#f1f5f9' },
+  { id: 'pbso4', formula: 'PbSO₄', name: '硫酸鉛', elements: ['Pb', 'S', 'O'], desc: '白色沉澱', stock: false, liquid: false, tone: '#f8fafc' },
+  { id: 'cacl2_aq', formula: 'CaCl₂(aq)', name: '氯化鈣', elements: ['Ca', 'Cl'], desc: '酸與碳酸鹽', stock: false, liquid: true, tone: '#fef3c7' },
+  { id: 'zncl2', formula: 'ZnCl₂', name: '氯化鋅', elements: ['Zn', 'Cl'], desc: '鋅與酸', stock: false, liquid: false, tone: '#e2e8f0' },
+  { id: 'so2', formula: 'SO₂', name: '二氧化硫', elements: ['S', 'O'], desc: '硫燃燒', stock: false, liquid: false, tone: '#fef08a' },
+  { id: 'al2o3', formula: 'Al₂O₃', name: '氧化鋁', elements: ['Al', 'O'], desc: '鋁燃燒', stock: false, liquid: false, tone: '#f5f5f4' },
+  { id: 'kcl', formula: 'KCl', name: '氯化鉀', elements: ['K', 'Cl'], desc: '氯酸鉀分解', stock: false, liquid: false, tone: '#f8fafc' },
+  { id: 'ch3coona', formula: 'CH₃COONa', name: '乙酸鈉', elements: ['C', 'H', 'O', 'Na'], desc: '中和產物', stock: false, liquid: false, tone: '#fef9c3' },
+  { id: 'fe_oh2', formula: 'Fe(OH)₂', name: '氫氧化亞鐵', elements: ['Fe', 'O', 'H'], desc: '綠色沉澱', stock: false, liquid: false, tone: '#84cc16' },
+]
+
+export { baseCompounds }
+export const compounds = [...baseCompounds, ...generatedElementCompounds]
+
+export const compoundById = Object.fromEntries(compounds.map((c) => [c.id, c]))
+export const stockCompounds = compounds.filter((c) => c.stock)

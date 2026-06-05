@@ -1,0 +1,2 @@
+cd "C:\Users\user\Desktop\網頁程式設計\CHEM-IS-TRY"
+npm run dev
