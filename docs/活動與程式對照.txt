@@ -1,0 +1,228 @@
+CHEM-IS-TRY — 活動與程式對照
+================================
+說明：本檔列出「使用者在網頁／指令列做了什麼」時，由哪些程式負責運作。
+產生：2026-06-09
+
+────────────────────────────────────────
+一、整體啟動
+────────────────────────────────────────
+
+| 你執行的指令／動作     | 實際運作的程式                          |
+|------------------------|-----------------------------------------|
+| npm run dev            | Vite 開發伺服器 + React 熱更新        |
+| 瀏覽器開啟網址         | index.html → main.jsx → App.jsx         |
+| 畫面樣式               | index.css（含 Tailwind）                |
+
+總指揮：App.jsx
+核心邏輯：
+  · hooks/useLabState.js   — 實驗狀態、反應、筆記
+  · hooks/useContextMenu.js — 右鍵選單
+
+────────────────────────────────────────
+二、週期表選元素
+────────────────────────────────────────
+
+| 活動                   | 負責程式                                |
+|------------------------|-----------------------------------------|
+| 顯示 118 格週期表      | components/PeriodicTable.jsx            |
+| 格子座標排列           | data/periodicLayout.js                  |
+| 元素名稱、顏色、狀態   | data/elements.js                        |
+| 點元素加入實驗台       | useLabState.js → addToBeaker()          |
+| 元素圖示顯示           | components/ElementIcon.jsx              |
+| 右鍵元素簡介           | elements.js → getElementIntro()         |
+
+────────────────────────────────────────
+三、溶液與試劑櫃
+────────────────────────────────────────
+
+| 活動                   | 負責程式                                |
+|------------------------|-----------------------------------------|
+| 試劑瓶 UI              | components/LabBench.jsx（ReagentBottle）  |
+| 試劑櫃展開／收合       | LabBench.jsx + index.css（reagent-zone）  |
+| 試劑清單資料           | data/compounds.js（stock: true）          |
+| 點試劑傾倒             | useLabState.js → addCompoundToBeaker()  |
+| 液體須先放燒杯檢查     | useLabState.js → requireBeakerForSolution() |
+
+────────────────────────────────────────
+四、實驗器具
+────────────────────────────────────────
+
+| 活動                   | 負責程式                                |
+|------------------------|-----------------------------------------|
+| 器具按鈕列             | LabBench.jsx（ToolIcon）                |
+| 器具說明文字           | data/equipment.js                       |
+| 燒杯圖示               | components/BeakerIcon.jsx             |
+| 台面實體圖（燒杯等）   | components/BenchEquipment.jsx           |
+| 開關燒杯               | useLabState.js → toggleBeaker()         |
+| 火柴／酒精燈／攪拌棒等 | useLabState.js → toggleTool()           |
+
+────────────────────────────────────────
+五、混合／燃燒實驗
+────────────────────────────────────────
+
+| 活動                   | 負責程式                                |
+|------------------------|-----------------------------------------|
+| 「混合」「燃燒」按鈕   | LabBench.jsx → runReaction('mix'/'burn') |
+| 反應鍵組合             | data/reactions.js → reactionKey()       |
+| 反應判斷（能否觸發）   | data/reactions.js → getReaction()       |
+| 手動設計反應           | data/manualReactions.js                 |
+| 118 元素自動反應       | data/generated/elementReactions.js    |
+| 產物化合物資料         | data/compounds.js                       |
+|                        | data/generated/elementCompounds.js      |
+| 需火柴檢查             | useLabState.js → runReaction()（burn）  |
+| 需酒精燈檢查           | useLabState.js → runReaction()（needsHeat） |
+| 反應計時               | useLabState.js → startReactionTimer()   |
+| 碼表加速               | useLabState.js → accelerateAndFinish()  |
+| 無反應時想像提示       | data/reactions.js → findImagination()   |
+| 十類反應驗證清單       | data/reactionCatalog.js                 |
+
+────────────────────────────────────────
+六、反應動畫與實驗報告
+────────────────────────────────────────
+
+| 活動                   | 負責程式                                |
+|------------------------|-----------------------------------------|
+| 火焰、氣泡、沉澱動畫   | components/ExperimentAnimations.jsx     |
+| 中央大燒杯 BEAKER 動畫 | components/BeakerReactionStage.jsx      |
+| 現象 → 動畫對應        | utils/reactionAnim.js                   |
+| 指示劑變色             | reactionAnim.js → indicatorColorAnim()  |
+| 白底實驗報告區         | LabBench.jsx + index.css（lab-report）    |
+| 寫入現象文字           | useLabState.js → finishReaction()        |
+
+────────────────────────────────────────
+七、合成圖鑑
+────────────────────────────────────────
+
+| 活動                   | 負責程式                                |
+|------------------------|-----------------------------------------|
+| 右側圖鑑面板           | components/CompoundAtlas.jsx            |
+| 依選取元素提示合成物   | utils/compoundHints.js                  |
+| 解鎖狀態管理           | useLabState.js（unlocked 陣列）         |
+| 圖鑑點「倒入」         | addCompoundToBeaker()（同試劑櫃）       |
+
+────────────────────────────────────────
+八、實驗筆記本
+────────────────────────────────────────
+
+| 活動                   | 負責程式                                |
+|------------------------|-----------------------------------------|
+| 筆記 UI                | components/Notebook.jsx                 |
+| 成功反應後寫入筆記     | useLabState.js → finishReaction()        |
+| 展開實驗過程           | Notebook.jsx（processLog）              |
+| 重現此實驗             | useLabState.js → replayExperiment()     |
+| 存到瀏覽器             | useLabState.js → persist()              |
+|                        | 使用 Web API：localStorage              |
+
+────────────────────────────────────────
+九、右鍵簡介
+────────────────────────────────────────
+
+| 活動                   | 負責程式                                |
+|------------------------|-----------------------------------------|
+| 右鍵彈出說明框         | useContextMenu.js + ContextMenu.jsx     |
+| 元素／試劑／器具簡介   | App.jsx → showIntro() 傳入標題與內文   |
+
+────────────────────────────────────────
+十、移除／清空
+────────────────────────────────────────
+
+| 活動                   | 負責程式                                |
+|------------------------|-----------------------------------------|
+| 點選台面物質           | useLabState.js → selectBeakerItem()     |
+| 移除選取               | useLabState.js → removeSelectedFromBeaker() |
+| 清空實驗台             | useLabState.js → clearBeaker()          |
+
+────────────────────────────────────────
+十一、資料流總覽
+────────────────────────────────────────
+
+使用者操作
+    ↓
+components/（PeriodicTable、LabBench、CompoundAtlas、Notebook…）
+    ↓
+hooks/useLabState.js（狀態與邏輯）
+    ↓
+data/reactions.js ← manualReactions.js + elementReactions.js
+data/compounds.js ← elementCompounds.js
+data/elements.js
+    ↓
+utils/reactionAnim.js → ExperimentAnimations / BeakerReactionStage
+    ↓
+localStorage（筆記、解鎖物）
+
+────────────────────────────────────────
+十二、開發／維護指令（非網頁畫面）
+────────────────────────────────────────
+
+| 指令                   | 跑的程式                                | 用途 |
+|------------------------|-----------------------------------------|------|
+| npm run build          | Vite                                    | 打包 dist/ |
+| npm run preview        | Vite                                    | 預覽建置結果 |
+| npm run generate:elements | scripts/generate-element-reactions.mjs | 從 xlsx 產生 118 元素反應 |
+| npm run test:reactions | scripts/verify-reactions.mjs            | 驗證 reactionCatalog |
+| npm run test:formulas  | scripts/verify-formulas.mjs             | 驗證化學式 |
+| npm run test:elements  | scripts/export-element-reactions.mjs      | 產生元素反應一覽 txt |
+| npm run test:database  | scripts/import-element-database.mjs     | 產生資料庫一覽 txt |
+| npm run test:all       | 上述腳本依序執行                        | 完整驗證 |
+| npm run ppt:bg         | scripts/export-ppt-template-bg.ps1      | 匯出簡報背景圖 |
+| npm run ppt            | ppt:bg + Marp CLI                       | 產生專題簡報 pptx |
+
+────────────────────────────────────────
+十三、主要檔案一覽
+────────────────────────────────────────
+
+【進入點】
+  index.html
+  src/main.jsx
+  src/App.jsx
+
+【畫面元件 components/】
+  PeriodicTable.jsx    — 週期表
+  LabBench.jsx         — 實驗台、試劑、按鈕、報告
+  CompoundAtlas.jsx    — 合成圖鑑
+  Notebook.jsx         — 實驗筆記
+  ContextMenu.jsx      — 右鍵選單
+  BenchEquipment.jsx   — 台面器具圖
+  BeakerIcon.jsx       — 燒杯圖示
+  BeakerReactionStage.jsx — 反應大燒杯動畫
+  ExperimentAnimations.jsx — 實驗動畫層
+  ElementIcon.jsx      — 元素／化合物圖示
+
+【邏輯 hooks/】
+  useLabState.js       — 實驗核心狀態機
+  useContextMenu.js    — 右鍵選單狀態
+
+【資料 data/】
+  elements.js          — 118 元素
+  compounds.js         — 試劑與化合物
+  reactions.js         — 反應引擎（合併手動＋自動）
+  manualReactions.js   — 手動反應
+  generated/elementReactions.js   — 自動生成反應
+  generated/elementCompounds.js — 自動生成產物
+  periodicLayout.js    — 週期表排版
+  equipment.js         — 器具說明
+  reactionCatalog.js   — 十類反應驗證表
+  formulaCatalog.js    — 化學式驗證表
+
+【工具 utils/】
+  reactionAnim.js      — 動畫對應
+  compoundHints.js     — 圖鑑提示
+
+【樣式】
+  src/index.css
+
+【文件 docs/】
+  活動與程式對照.txt         — 本檔
+  專題演示講稿與實驗示範.txt — 上台演示用
+  化學反應類型與範例.txt     — 十類反應操作
+  CHEM-IS-TRY程式功能說明.txt
+
+────────────────────────────────────────
+十四、一句話記憶
+────────────────────────────────────────
+
+  看畫面、按按鈕  → components/*.jsx
+  實驗怎麼跑      → hooks/useLabState.js
+  能不能反應      → data/reactions.js + compounds.js + elements.js
+  動畫怎麼演      → utils/reactionAnim.js + ExperimentAnimations.jsx
+  筆記存哪        → localStorage（useLabState.js → persist）

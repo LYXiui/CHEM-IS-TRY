@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { stockCompounds, compoundById } from '../data/compounds'
 import { EQUIPMENT } from '../data/equipment'
 import { elementBySymbol, getElementIntro } from '../data/elements'
@@ -10,7 +11,7 @@ function PhenomenonEffects({ effects, effectColor }) {
   if (!effects?.length) return null
   const tags = {
     bubble: '🫧 冒泡',
-    precipitate: '⬇️ 沉澱',
+    precipitate: '⬇️ 固態沉澱',
     colorChange: '🎨 變色',
     flame: '🔥 燃燒',
     gas: '☁️ 氣體',
@@ -22,7 +23,7 @@ function PhenomenonEffects({ effects, effectColor }) {
       {effects.map((e) => (
         <span
           key={e}
-          className="text-xs px-2 py-0.5 rounded-full border border-white/20"
+          className="lab-report-tag text-xs px-2 py-0.5 rounded-full border border-slate-300 bg-slate-50 text-slate-700"
           style={e === 'colorChange' || e === 'precipitate' ? { background: effectColor || '#64748b' } : {}}
         >
           {tags[e] || e}
@@ -109,7 +110,7 @@ function ReagentBottle({ compound, onPour, onContextMenu }) {
       <div className="reagent-bottle-glass">
         <div className="reagent-liquid" style={{ background: compound.tone }} />
       </div>
-      <span className="mt-1 text-[9px] font-mono font-bold text-cyan-100">{compound.formula}</span>
+      <span className="reagent-formula mt-1 text-[9px] font-mono font-bold">{compound.formula}</span>
     </button>
   )
 }
@@ -144,7 +145,16 @@ export default function LabBench({
   solutionTint,
   itemAnims,
   reactionBusy,
+  reactionSnapshot,
+  children,
 }) {
+  const [reagentExpanded, setReagentExpanded] = useState(false)
+
+  const fx = labAnimation?.effects || []
+  const isAnimating = reactionBusy || fx.length > 0 || labAnimation?.type === 'solutionShift'
+  const showResultIdle =
+    !isAnimating && !!phenomenon && beaker.length === 0 && !beakerPlaced
+
   const isActive = (id) => {
     if (id === 'beaker') return beakerPlaced
     if (id === 'lamp') return lampOn
@@ -156,15 +166,6 @@ export default function LabBench({
   return (
     <section className="game-panel p-4 lab-bench-panel">
       <h2 className="game-panel-title mb-4">實驗台</h2>
-
-      <div className="reagent-zone mb-4">
-        <h3 className="text-xs font-semibold text-cyan-300/90 mb-2 tracking-wider">溶液與試劑櫃</h3>
-        <div className="reagent-scroll flex flex-wrap gap-2 justify-center sm:justify-start pb-1">
-          {stockCompounds.map((c) => (
-            <ReagentBottle key={c.id} compound={c} onPour={onPour} onContextMenu={onContextMenu} />
-          ))}
-        </div>
-      </div>
 
       <div className="lab-bench-surface">
         <p className="text-[10px] text-slate-500 mb-2 uppercase tracking-widest">實驗器具</p>
@@ -192,16 +193,16 @@ export default function LabBench({
         </div>
 
         <div
-          className={`bench-workspace min-h-[200px] rounded-xl border border-slate-300/60 bg-white/50 p-4 relative overflow-hidden ${reactionBusy ? 'bench-reacting' : ''}`}
+          className={`bench-workspace min-h-[200px] rounded-xl border border-slate-300/60 bg-white/50 p-4 relative ${isAnimating ? 'bench-reacting overflow-visible' : 'overflow-hidden'}`}
         >
           <ExperimentAnimations
             anim={labAnimation}
             solutionTint={solutionTint}
-            beaker={beaker}
+            beaker={beaker.length ? beaker : reactionSnapshot || beaker}
             reactionBusy={reactionBusy}
             itemAnims={itemAnims}
           />
-          {!reactionBusy && (
+          {!isAnimating && (
             <BenchEquipment
               beakerPlaced={beakerPlaced}
               beaker={beaker}
@@ -213,15 +214,19 @@ export default function LabBench({
               solutionTint={solutionTint}
             />
           )}
-          {!reactionBusy && beaker.length === 0 && !beakerPlaced ? (
+          {showResultIdle ? (
+            <p className="lab-result-idle text-sm text-slate-700 text-center py-10 relative z-10">
+              實驗完成。請查看下方報告，或按「清空」重置實驗台。
+            </p>
+          ) : !isAnimating && !phenomenon && beaker.length === 0 && !beakerPlaced ? (
             <p className="text-sm text-slate-500 text-center py-8 relative z-10">
               點選上方器具後會出現於台面；週期表選固態元素可直接實驗，所有液體須先放置燒杯
             </p>
-          ) : !reactionBusy && beaker.length === 0 ? (
+          ) : !isAnimating && !phenomenon && beaker.length === 0 && beakerPlaced ? (
             <p className="text-sm text-slate-500 text-center py-6 relative z-10">
               燒杯已放置，可傾倒溶液或加入元素
             </p>
-          ) : !reactionBusy ? (
+          ) : !isAnimating && beaker.length > 0 ? (
             <div className="flex flex-wrap gap-2 justify-center relative z-10">
               {beaker.map((item, i) => (
                 <button
@@ -261,26 +266,55 @@ export default function LabBench({
           </button>
         </div>
 
-        {phenomenon && (
-          <div className="mt-4 p-3 rounded-lg bg-slate-900/70 border border-amber-500/25">
-            <div className="font-bold text-amber-200 text-sm">
-              {phenomenon.name}{' '}
-              <span className="font-mono text-cyan-300">{phenomenon.formula}</span>
+      </div>
+
+      {(phenomenon || bubble || lastAction) && (
+        <div className="lab-report-panel">
+          <h3 className="lab-report-heading">實驗報告</h3>
+          {phenomenon && (
+            <div className="lab-report">
+              <div className="lab-report-title">
+                {phenomenon.name}{' '}
+                <span className="lab-report-formula font-mono">{phenomenon.formula}</span>
+              </div>
+              <p className="lab-report-text">{phenomenon.text}</p>
+              <PhenomenonEffects effects={effects} effectColor={effectColor} />
             </div>
-            <p className="text-xs text-slate-300 mt-1">{phenomenon.text}</p>
-            <PhenomenonEffects effects={effects} effectColor={effectColor} />
-          </div>
-        )}
+          )}
+          {bubble && (
+            <div className="lab-report lab-report-hint">
+              <p className="lab-report-hint-label">想像提示</p>
+              <p className="lab-report-text">{bubble}</p>
+            </div>
+          )}
+          {lastAction && (
+            <p className="lab-report-action">› {lastAction}</p>
+          )}
+        </div>
+      )}
 
-        {bubble && (
-          <div className="mt-3 p-3 rounded-xl border border-cyan-500/30 bg-cyan-950/25 text-xs text-slate-300">
-            {bubble}
+      <div className="lab-bench-attachments">
+        <div className={`lab-bench-attach-col reagent-zone ${reagentExpanded ? 'reagent-zone-expanded' : ''}`}>
+          <div className="reagent-zone-header">
+            <h3 className="lab-bench-attach-title reagent-zone-title mb-0">溶液與試劑櫃</h3>
+            <button
+              type="button"
+              className="reagent-expand-btn"
+              onClick={() => setReagentExpanded((v) => !v)}
+              aria-expanded={reagentExpanded}
+            >
+              {reagentExpanded ? '收合 ▴' : '展開 ▾'}
+            </button>
           </div>
-        )}
-
-        {lastAction && (
-          <p className="mt-2 text-[10px] text-slate-500 text-center font-mono">› {lastAction}</p>
-        )}
+          <div className={`reagent-scroll flex flex-wrap gap-2 justify-center sm:justify-start pb-1 ${reagentExpanded ? 'reagent-scroll-expanded' : ''}`}>
+            {stockCompounds.map((c) => (
+              <ReagentBottle key={c.id} compound={c} onPour={onPour} onContextMenu={onContextMenu} />
+            ))}
+          </div>
+        </div>
+        <div className="lab-bench-attach-col lab-bench-elements">
+          {children}
+        </div>
       </div>
     </section>
   )

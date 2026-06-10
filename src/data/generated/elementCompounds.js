@@ -2821,19 +2821,6 @@ export const generatedElementCompounds = [
     "tone": "#d1c4e9"
   },
   {
-    "id": "db_hal_Zn",
-    "formula": "ZnCl",
-    "name": "氯化鋅",
-    "elements": [
-      "Zn",
-      "Cl"
-    ],
-    "desc": "資料庫自動生成（hal）",
-    "stock": false,
-    "liquid": false,
-    "tone": "#b0bec5"
-  },
-  {
     "id": "db_hal_Zr",
     "formula": "ZrCl",
     "name": "氯化鋯",

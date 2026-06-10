@@ -1,12 +1,45 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { compoundById, compounds, stockCompounds } from '../data/compounds'
 import { elementBySymbol } from '../data/elements'
-import { findImagination, getReaction } from '../data/reactions'
-import { effectsToAnimation, elementMotion, indicatorColorAnim } from '../utils/reactionAnim'
+import { findImagination, getReaction, reactionKey } from '../data/reactions'
+import {
+  computeColorShiftDuration,
+  effectsToAnimation,
+  elementMotion,
+  indicatorColorAnim,
+  isBleachFade,
+  resolveLiquidColorFromBeaker,
+} from '../utils/reactionAnim'
 
 const STORAGE_KEY = 'chem-is-try-notebook-v6'
 const STOCK_IDS = stockCompounds.map((c) => c.id)
 const MAX_BEAKER = 8
+
+/** 同一組反應（反應物 + 混合／燃燒模式）視為同一筆記鍵 */
+function notebookReactionKey(entry) {
+  const snap = entry?.snapshot
+  const mode = snap?.mode || 'mix'
+  if (entry?.reactionKey) return entry.reactionKey
+  if (snap?.items?.length) return `${reactionKey(snap.items)}:${mode}`
+  return `${entry?.id || 'unknown'}:${mode}`
+}
+
+/** 保留每種反應最新一筆，依時間新→舊排序 */
+function dedupeNotebook(entries) {
+  const byKey = new Map()
+  for (const e of entries) {
+    const k = notebookReactionKey(e)
+    const prev = byKey.get(k)
+    if (!prev || new Date(e.time) > new Date(prev.time)) byKey.set(k, e)
+  }
+  return [...byKey.values()].sort((a, b) => new Date(b.time) - new Date(a.time))
+}
+
+function upsertNotebookEntry(entries, entry) {
+  const key = notebookReactionKey(entry)
+  const rest = entries.filter((e) => notebookReactionKey(e) !== key)
+  return [entry, ...rest].slice(0, 50)
+}
 
 export function useLabState() {
   const [beakerPlaced, setBeakerPlaced] = useState(false)
@@ -28,12 +61,14 @@ export function useLabState() {
   const [timerSec, setTimerSec] = useState(0)
   const [timerRunning, setTimerRunning] = useState(false)
   const [reactionBusy, setReactionBusy] = useState(false)
+  const [reactionSnapshot, setReactionSnapshot] = useState(null)
   const [labAnimation, setLabAnimation] = useState(null)
   const [solutionTint, setSolutionTint] = useState(null)
   const [itemAnims, setItemAnims] = useState({})
 
   const timerRef = useRef(null)
   const animTimerRef = useRef(null)
+  const tintTimerRef = useRef(null)
   const pendingReactionRef = useRef(null)
   const pendingModeRef = useRef('mix')
   const snapshotRef = useRef(null)
@@ -50,7 +85,7 @@ export function useLabState() {
       if (raw) {
         const data = JSON.parse(raw)
         setUnlocked([...new Set([...STOCK_IDS, ...(data.unlocked || [])])])
-        if (Array.isArray(data.notebook)) setNotebook(data.notebook)
+        if (Array.isArray(data.notebook)) setNotebook(dedupeNotebook(data.notebook))
       }
     } catch {
       /* ignore */
@@ -84,16 +119,28 @@ export function useLabState() {
   const triggerAnim = useCallback((payload, duration = 3000) => {
     if (animTimerRef.current) clearTimeout(animTimerRef.current)
     setLabAnimation(payload)
-    animTimerRef.current = setTimeout(() => setLabAnimation(null), duration)
+    animTimerRef.current = setTimeout(() => {
+      setLabAnimation(null)
+      setReactionSnapshot(null)
+    }, duration)
   }, [])
 
   const playEffectsAnim = useCallback(
-    (fx, color, durationMs) => {
-      const a = effectsToAnimation(fx, color, durationMs)
+    (fx, color, durationMs, meta = {}) => {
+      const a = effectsToAnimation(fx, color, durationMs, meta)
       if (a) triggerAnim(a, a.duration)
     },
     [triggerAnim],
   )
+
+  const scheduleSolutionTint = useCallback((color, delayMs = 0) => {
+    if (tintTimerRef.current) clearTimeout(tintTimerRef.current)
+    if (!color) return
+    tintTimerRef.current = setTimeout(() => {
+      setSolutionTint(color)
+      tintTimerRef.current = null
+    }, Math.max(0, delayMs))
+  }, [])
 
   const flashItemMotion = useCallback((index, motion) => {
     setItemAnims((m) => ({ ...m, [index]: motion }))
@@ -255,8 +302,18 @@ export function useLabState() {
 
     const ind = indicatorColorAnim(compoundId)
     if (ind) {
-      triggerAnim({ type: 'solutionShift', from: ind.from, to: ind.to }, 3500)
-      setSolutionTint(ind.to)
+      const shiftMs = 3800
+      triggerAnim(
+        {
+          type: 'solutionShift',
+          from: ind.from,
+          to: ind.to,
+          colorShiftDuration: shiftMs,
+          isBleachFade: isBleachFade(ind.from, ind.to),
+        },
+        shiftMs + 300,
+      )
+      scheduleSolutionTint(ind.to, shiftMs)
       logStep(ind.label)
     }
 
@@ -280,12 +337,22 @@ export function useLabState() {
   }
 
   const clearBeaker = () => {
-    if (beaker.length === 0) return
+    if (animTimerRef.current) clearTimeout(animTimerRef.current)
+    if (tintTimerRef.current) clearTimeout(tintTimerRef.current)
+    stopTimer()
     setBeaker([])
+    setBeakerPlaced(false)
     setSelectedIndex(null)
     setSolutionTint(null)
+    setLidOn(false)
+    setLampOn(false)
+    setMatchLit(false)
+    setMatchOnBench(false)
+    setTools({ stir: false, filter: false, separator: false, cooler: false })
+    setLabAnimation(null)
+    setReactionSnapshot(null)
     resetFeedback()
-    setLastAction('清空實驗台物質')
+    setLastAction('已清空實驗台（含器具與物質）')
   }
 
   const finishReaction = (r, mode) => {
@@ -295,7 +362,7 @@ export function useLabState() {
     fx.forEach((e) => {
       const labels = {
         bubble: '溶液冒泡',
-        precipitate: '生成沉澱並下沉',
+        precipitate: '固態沉澱物下沉累積',
         colorChange: '溶液顏色改變',
         flame: '燃燒放熱',
         gas: '氣體產生',
@@ -313,17 +380,25 @@ export function useLabState() {
     })
     setEffects(fx)
     setEffectColor(r.effectColor || null)
-    playEffectsAnim(fx, r.effectColor, 4500)
-    if (fx.includes('colorChange') && r.effectColor) setSolutionTint(r.effectColor)
 
+    const snap = snapshotRef.current
+    if (fx.includes('colorChange') && r.effectColor) {
+      const waitSec = r.duration ?? (mode === 'burn' ? 4 : 2)
+      const waitMs = waitSec * 1000
+      const fromColor = resolveLiquidColorFromBeaker(snap?.items || [], null)
+      const shiftMs = computeColorShiftDuration(fx, waitMs, fromColor, r.effectColor) || 4500
+      const tintDelay = Math.max(500, shiftMs - waitMs + 250)
+      scheduleSolutionTint(r.effectColor, tintDelay)
+    }
     const entry = {
       id: r.compoundId,
       time: new Date().toISOString(),
       note: mode === 'burn' ? '燃燒實驗' : lampOn ? '混合實驗（加熱）' : '混合實驗',
-      snapshot: snapshotRef.current,
+      snapshot: snap,
       processLog: [...processLogRef.current],
       resultName: c?.name,
       resultFormula: c?.formula,
+      reactionKey: snap?.items?.length ? `${reactionKey(snap.items)}:${mode}` : `${r.compoundId}:${mode}`,
     }
 
     setUnlocked((prev) => {
@@ -333,7 +408,7 @@ export function useLabState() {
           : prev
       unlockedRef.current = next
       setNotebook((nb) => {
-        const n2 = [entry, ...nb].slice(0, 50)
+        const n2 = upsertNotebookEntry(nb, entry)
         persist(next, n2)
         return n2
       })
@@ -343,6 +418,7 @@ export function useLabState() {
     setLastAction(`完成：${c?.name}`)
     setBubble(r.imagination || null)
     setBeaker([])
+    setBeakerPlaced(false)
     setSelectedIndex(null)
     setLidOn(false)
     setMatchLit(false)
@@ -398,8 +474,21 @@ export function useLabState() {
         lampOn: mode === 'mix' ? lampOn : false,
         matchLit: mode === 'burn' ? matchLit : false,
       }
+      setReactionSnapshot(items.map((x) => ({ ...x })))
       const wait = r.duration ?? (mode === 'burn' ? 4 : 2)
-      playEffectsAnim(r.effects, r.effectColor, wait * 1000 + 800)
+      const waitMs = wait * 1000
+      const fxList = r.effects || []
+      const fromColor = resolveLiquidColorFromBeaker(items, null)
+      const shiftMs =
+        computeColorShiftDuration(fxList, waitMs, fromColor, r.effectColor) || waitMs + 800
+      const animMs = fxList.includes('colorChange')
+        ? Math.max(waitMs + 500, shiftMs + 350)
+        : waitMs + 800
+      playEffectsAnim(r.effects, r.effectColor, animMs, {
+        imagination: r.imagination,
+        phenomenon: r.phenomenon,
+        compoundId: r.compoundId,
+      })
       if (wait > 0) {
         pendingReactionRef.current = r
         pendingModeRef.current = mode
@@ -442,21 +531,34 @@ export function useLabState() {
   }
 
   const replayExperiment = (entry) => {
-    if (!entry?.snapshot?.items?.length) {
+    const key = notebookReactionKey(entry)
+    const latest =
+      notebook
+        .filter((e) => notebookReactionKey(e) === key)
+        .sort((a, b) => new Date(b.time) - new Date(a.time))[0] || entry
+
+    if (!latest?.snapshot?.items?.length) {
       setBubble('此筆記無法重現')
       return
     }
+
+    setNotebook((nb) => {
+      const n2 = dedupeNotebook(nb)
+      if (n2.length !== nb.length) persist(unlockedRef.current, n2)
+      return n2
+    })
+
     stopTimer()
     resetProcessLog()
-    const hasLiquid = entry.snapshot.items.some((x) => x.type === 'compound')
+    const hasLiquid = latest.snapshot.items.some((x) => x.type === 'compound')
     setBeakerPlaced(hasLiquid)
-    setBeaker(entry.snapshot.items.map((x) => ({ ...x })))
-    setLampOn(!!entry.snapshot.lampOn)
-    setMatchLit(!!entry.snapshot.matchLit)
+    setBeaker(latest.snapshot.items.map((x) => ({ ...x })))
+    setLampOn(!!latest.snapshot.lampOn)
+    setMatchLit(!!latest.snapshot.matchLit)
     setLidOn(false)
     setSelectedIndex(null)
     resetFeedback()
-    setLastAction(`重現：${entry.resultFormula || entry.id}`)
+    setLastAction(`重現：${latest.resultFormula || latest.id}`)
     setBubble('已還原實驗條件，可再次操作')
   }
 
@@ -483,6 +585,7 @@ export function useLabState() {
     timerSec,
     timerRunning,
     reactionBusy,
+    reactionSnapshot,
     labAnimation,
     solutionTint,
     itemAnims,

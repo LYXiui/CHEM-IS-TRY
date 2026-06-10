@@ -22,13 +22,6 @@ export default function App() {
 
       <div className="grid xl:grid-cols-[1fr_300px] gap-4">
         <div className="space-y-4 min-w-0">
-          <PeriodicTable
-            onSelect={lab.addToBeaker}
-            selected={lab.beaker}
-            hintElement={lab.hintElement}
-            onHintChange={lab.setHintElement}
-            onContextMenu={showIntro}
-          />
           <LabBench
             beakerPlaced={lab.beakerPlaced}
             beaker={lab.beaker}
@@ -59,7 +52,17 @@ export default function App() {
             solutionTint={lab.solutionTint}
             itemAnims={lab.itemAnims}
             reactionBusy={lab.reactionBusy}
-          />
+            reactionSnapshot={lab.reactionSnapshot}
+          >
+            <PeriodicTable
+              embedded
+              onSelect={lab.addToBeaker}
+              selected={lab.beaker}
+              hintElement={lab.hintElement}
+              onHintChange={lab.setHintElement}
+              onContextMenu={showIntro}
+            />
+          </LabBench>
         </div>
 
         <aside className="space-y-4">

@@ -5,23 +5,55 @@ paginate: true
 size: 16:9
 lang: zh-TW
 header: 'CHEM-IS-TRY · 網頁程式設計'
-footer: '專題簡報 · 課堂技術'
 style: |
   section {
     font-family: "Microsoft JhengHei", sans-serif;
-    background: linear-gradient(145deg, #0f172a, #1e293b);
-    color: #e2e8f0;
-    font-size: 26px;
+    background-image: url('./assets/template-slide15.png');
+    background-size: cover;
+    background-position: center;
+    color: #1e293b;
+    font-size: 24px;
+    padding: 52px 56px 48px;
+  }
+  section.lead {
+    background-image: url('./assets/template-slide01.png');
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    padding: 18% 56px 0;
+  }
+  section.lead h1 {
+    font-size: 2.75em;
+    font-weight: 700;
+    color: #ffffff;
+    background: none;
+    margin: 0 0 0.2em;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 10px rgba(15, 23, 42, 0.2);
+  }
+  section.lead h2 {
+    color: #475569;
+    font-size: 1.45em;
+    font-weight: 400;
+    margin: 0;
+    text-shadow: none;
   }
   h1 {
-    background: linear-gradient(90deg, #67e8f9, #a78bfa);
-    -webkit-background-clip: text;
-    color: transparent;
+    color: #0f766e;
+    font-size: 1.45em;
+    margin-top: 0.2em;
   }
-  h2 { color: #22d3ee; font-size: 1.35em; }
-  table { font-size: 0.82em; }
-  th { background: #1e3a5f; color: #7dd3fc; }
-  code { background: #334155; color: #fde68a; }
+  h2 { color: #0e7490; font-size: 1.35em; }
+  table { font-size: 0.78em; color: #334155; background: rgba(255,255,255,0.88); }
+  th { background: #ecfdf5; color: #1e293b; }
+  td { background: rgba(255,255,255,0.92); }
+  code { background: rgba(241,245,249,0.95); color: #b45309; }
+  strong { color: #1e293b; }
+  header { color: #64748b; }
+  footer { display: none; }
+  section::after { color: #64748b; }
 ---
 
 <!-- _class: lead -->
@@ -29,24 +61,20 @@ style: |
 
 # CHEM-IS-TRY
 
-## 網頁程式設計專題簡報
-
-**重點：本專案運用之課堂技術**
-
-![w:140](https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=http%3A%2F%2Flocalhost%3A5173)
+## 網頁程式設計
 
 ---
 
 # 1. 專題簡介
 
-- **CHEM-IS-TRY**：虛擬化學實驗台（Chemistry + IS + TRY）
-- 技術本質：**單頁應用程式（SPA）**，純前端、無後端資料庫
-- 課程定位：整合「網頁程式設計」所學之 **HTML / CSS / JavaScript / React / 建置工具**
+- **CHEM-IS-TRY**：虛擬化學實驗台
+- 技術本質：**單頁應用程式（SPA）**
+- 整合「網頁程式設計」所學之 **HTML / CSS / JavaScript / React / 建置工具**
 - 使用者透過週期表、試劑架、實驗台進行模擬實驗，結果寫入筆記本
 
 ---
 
-# 2. 課堂技術一覽（18 項運用）
+# 2. 技術一覽（18 項運用）
 
 | 類別 | 技術 | 專案中用途 |
 |------|------|------------|
@@ -62,7 +90,7 @@ style: |
 
 # 3. HTML5 語意結構
 
-**課堂重點：** 語意標籤、文件結構、可存取性
+**重點：** 語意標籤、文件結構、可存取性
 
 ```html
 <body>
@@ -72,41 +100,14 @@ style: |
 ```
 
 - `lang="zh-Hant"` 指定繁體中文
-- `type="module"` 啟用 **ES Module**（課堂：現代 JS 模組化）
+- `type="module"` 啟用 **ES Module**（現代 JS 模組化）
 - 外部字型 `<link>` 載入手寫筆記字體（Google Fonts）
 
 ---
 
-# 4. CSS3 — 版面與視覺
+# 4. JavaScript ES6+ 模組化
 
-**課堂重點：** 選擇器、盒模型、Flexbox、Grid、漸層
-
-- **Flexbox**：試劑瓶、實驗器具橫向排列
-- **CSS Grid**：週期表 18 欄標準排列（`grid-template-columns`）
-- **自訂屬性** `--lab-glow`、`--lab-deep` 統一主題色
-- **漸層背景** `linear-gradient`、`radial-gradient` 營造實驗室氛圍
-- **媒體查詢概念**：Tailwind 的 `md:`、`xl:` 斷點（響應式）
-
----
-
-# 5. CSS3 — 動畫與過渡
-
-**課堂重點：** `@keyframes`、`transition`、`animation`
-
-| 動畫 class | 技術 | 對應現象 |
-|------------|------|----------|
-| `anim-flame` | keyframes | 燃燒火焰 |
-| `anim-precipitate` | transform + opacity | 沉澱下落 |
-| `anim-color-wave` | opacity 漸變 | 溶液變色 |
-| `chip-sink` / `chip-float` | translateY | 元素加入 |
-
-元件 `ExperimentAnimations.jsx` 依 **狀態** 條件渲染動畫層（React 條件顯示）
-
----
-
-# 6. JavaScript ES6+ 模組化
-
-**課堂重點：** `import` / `export`、箭頭函式、樣板字串
+**重點：** `import` / `export`、箭頭函式、樣板字串
 
 ```javascript
 // 資料與邏輯分離
@@ -123,9 +124,9 @@ export function reactionKey(items) { ... }
 
 ---
 
-# 7. React — 元件化設計
+# 5. React — 元件化設計
 
-**課堂重點：** 函式元件、JSX、元件樹、重用
+**重點：** 函式元件、JSX、元件樹、重用
 
 ```
 App
@@ -142,9 +143,9 @@ App
 
 ---
 
-# 8. React Hooks — useState
+# 6. React Hooks — useState
 
-**課堂重點：** 函式元件中的區域狀態
+**重點：** 函式元件中的區域狀態
 
 ```javascript
 const [beaker, setBeaker] = useState([])
@@ -154,13 +155,13 @@ const [lampOn, setLampOn] = useState(false)
 
 - 狀態改變 → React **自動重新渲染** 畫面
 - 實驗台物質、筆記、器具開關皆用 `useState` 管理
-- 符合課堂「宣告式 UI」：描述狀態，而非手動改 DOM
+- 符合「宣告式 UI」：描述狀態，而非手動改 DOM
 
 ---
 
-# 9. React Hooks — useEffect
+# 7. React Hooks — useEffect
 
-**課堂重點：** 副作用、生命週期、依賴陣列
+**重點：** 副作用、生命週期、依賴陣列
 
 ```javascript
 useEffect(() => {
@@ -173,19 +174,19 @@ useEffect(() => () => clearInterval(timerRef.current), [])
 
 - **掛載時** 從 localStorage 讀取歷史資料
 - **卸載時** 清除計時器，避免記憶體洩漏
-- 課堂對應：瀏覽器 API 與元件生命週期結合
+- 瀏覽器 API 與元件生命週期結合
 
 ---
 
-# 10. React Hooks — useCallback / useRef
+# 8. React Hooks — useCallback / useRef
 
-**課堂重點：** 效能優化、跨渲染保存值
+**重點：** 效能優化、跨渲染保存值
 
 | Hook | 用途 |
 |------|------|
 | `useCallback` | 快取 `persist`、`logStep`，避免不必要重建 |
 | `useRef` | `processLogRef` 累積過程不觸發重渲染 |
-| `useRef` | `timerRef` 保存 `setInterval`  ID |
+| `useRef` | `timerRef` 保存 `setInterval` ID |
 
 ```javascript
 const processLogRef = useRef([])
@@ -194,9 +195,9 @@ processLogRef.current.push({ text: '加入元素 Na' })
 
 ---
 
-# 11. Props 與事件處理
+# 9. Props 與事件處理
 
-**課堂重點：** 父子通訊、合成事件
+**重點：** 父子通訊、合成事件
 
 ```jsx
 <PeriodicTable
@@ -212,12 +213,10 @@ processLogRef.current.push({ text: '加入元素 Na' })
 
 ---
 
-# 12. Vite 6 建置工具
+# 10. Vite 6 建置工具
 
-**課堂重點：** 現代前端工程化、開發體驗
-
-| 指令 | 課堂意義 |
-|------|----------|
+| 指令 | 意義 |
+|------|------|
 | `npm run dev` | 本機開發伺服器 + **HMR** 熱更新 |
 | `npm run build` | 打包壓縮輸出 `dist/` 靜態檔 |
 | `npm run preview` | 預覽正式建置結果 |
@@ -231,9 +230,9 @@ base: process.env.VITE_BASE || '/'
 
 ---
 
-# 13. Tailwind CSS 4
+# 11. Tailwind CSS 4
 
-**課堂重點：** Utility-first、與建置流程整合
+**重點：** Utility-first、與建置流程整合
 
 ```css
 /* index.css */
@@ -245,15 +244,15 @@ base: process.env.VITE_BASE || '/'
 <div className="flex flex-wrap gap-2">
 ```
 
-- **原子化 class**：`p-4`、`rounded-xl`、`text-cyan-300`
+- **原子化 class**：`p-4`、`rounded-xl`、`text-slate-700`
 - 與 **自訂 CSS**（`.notebook-paper`、`.anim-flame`）並用
-- 課堂延伸：Bootstrap 概念 → Tailwind 更細粒度控制
+- 延伸：Bootstrap 概念 → Tailwind 更細粒度控制
 
 ---
 
-# 14. 資料驅動 UI（反應引擎）
+# 12. 資料驅動 UI（反應引擎）
 
-**課堂重點：** 資料與畫面分離、查表法
+**重點：** 資料與畫面分離、查表法
 
 ```javascript
 // reactions.js — 純資料物件
@@ -269,13 +268,13 @@ export function getReaction(items, mode) {
 ```
 
 - 新增反應 = **改 JSON 資料**，不必改 UI 結構
-- 對應課堂：**MVC 中 Model 與 View 分離** 思想
+- 對應 **MVC 中 Model 與 View 分離** 思想
 
 ---
 
-# 15. Web API — localStorage
+# 13. Web API — localStorage
 
-**課堂重點：** 瀏覽器儲存、JSON 序列化
+**重點：** 瀏覽器儲存、JSON 序列化
 
 ```javascript
 localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -286,13 +285,13 @@ localStorage.setItem(STORAGE_KEY, JSON.stringify({
 
 - **字串儲存**：物件需 `JSON.stringify` / `parse`
 - 筆記本、解鎖化合物跨工作階段保留
-- 限制：僅本機、無法跨裝置（課堂可對比 Cookie、Session）
+- 限制：僅本機、無法跨裝置（可對比 Cookie、Session）
 
 ---
 
-# 16. 自訂 Hook 與模組拆分
+# 14. 自訂 Hook 與模組拆分
 
-**課堂重點：** 邏輯重用、關注點分離
+**重點：** 邏輯重用、關注點分離
 
 | 檔案 | 職責 |
 |------|------|
@@ -301,11 +300,11 @@ localStorage.setItem(STORAGE_KEY, JSON.stringify({
 | `compoundHints.js` | 圖鑑提示演算法 |
 | `reactionAnim.js` | 現象 → 動畫對應 |
 
-符合 React 課堂：**邏輯與 UI 分離**，提升可維護性
+符合 React **邏輯與 UI 分離**，提升可維護性
 
 ---
 
-# 17. 專案目錄結構
+# 15. 專案目錄結構
 
 ```
 CHEM-IS-TRY/
@@ -324,7 +323,7 @@ CHEM-IS-TRY/
 
 ---
 
-# 18. 建置、簡報與 QR Code
+# 16. 建置與簡報
 
 ```bash
 npm install
@@ -333,23 +332,33 @@ npm run build    # 正式版
 npm run ppt      # 產生本簡報 PPTX
 ```
 
-![w:120 right](https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=http%3A%2F%2Flocalhost%3A5173)
-
-掃描開啟本機實驗台 · 簡報以 **Marp CLI** 從 Markdown 匯出（課堂：文件即簡報）
+簡報以 **Marp CLI** 從 Markdown 匯出（文件即簡報）
 
 ---
 
-# 19. 技術總結
+# 17. 線上體驗 CHEM-IS-TRY
 
-| 課堂單元 | 專案實踐 |
-|----------|----------|
-| HTML/CSS | 版面、動畫、手寫筆記風格 |
-| JavaScript | 模組、事件、資料處理 |
-| React | 元件、Hooks、Props |
-| 工程化 | Vite、npm、GitHub |
-| 瀏覽器 API | localStorage |
+<div style="display:flex;align-items:center;gap:2.5rem;margin-top:0.5rem;">
 
-**CHEM-IS-TRY** 將化學模擬與網頁程式設計技術完整結合。
+<div>
+
+![w:280px](./assets/chem-is-try-qr.png)
+
+</div>
+
+<div>
+
+**掃描 QR Code 開啟虛擬化學實驗台**
+
+- 118 種元素 · 試劑架 · 燒杯反應動畫
+- 實驗筆記本 · 一鍵重現實驗
+- GitHub Pages 線上版
+
+`https://lyxiui.github.io/CHEM-IS-TRY/`
+
+</div>
+
+</div>
 
 ---
 
@@ -360,6 +369,4 @@ npm run ppt      # 產生本簡報 PPTX
 
 # CHEM-IS-TRY
 
-![w:160](https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=http%3A%2F%2Flocalhost%3A5173)
-
-網頁程式設計專題 · 共 20 頁
+網頁程式設計 · 共 19 頁

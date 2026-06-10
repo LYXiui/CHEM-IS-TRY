@@ -212,13 +212,23 @@ export const manualReactions = {
     phenomenon: '鈣與稀硫酸生成微溶 CaSO₄',
     type: 'mix',
     effects: ['precipitate', 'bubble'],
+    effectColor: '#f8fafc',
     imagination: 'H₂↑',
+  },
+  'Cl+Zn': {
+    compoundId: 'zncl2',
+    phenomenon: '鋅與氯氣化合，生成 ZnCl₂（放熱）',
+    type: 'mix',
+    effects: ['precipitate', 'gas'],
+    effectColor: '#e2e8f0',
+    imagination: 'Cl₂↑ 黃綠色 — 具刺激性',
+    duration: 4,
   },
   'c:cuso4_aq+c:naoh': {
     compoundId: 'cu_oh2',
     phenomenon: '藍色 Cu(OH)₂ 沉澱',
     type: 'mix',
-    effects: ['precipitate'],
+    effects: ['precipitate', 'colorChange'],
     effectColor: '#0ea5e9',
     duration: 3,
   },
@@ -257,7 +267,7 @@ export const manualReactions = {
     phenomenon: '紫褪色，催化分解',
     type: 'mix',
     effects: ['colorChange', 'bubble'],
-    effectColor: '#a78bfa',
+    effectColor: '#bae6fd',
     duration: 6,
   },
   'c:caco3+c:hcl': {
@@ -272,6 +282,7 @@ export const manualReactions = {
     phenomenon: '碳酸鈉與鹽酸放出 CO₂',
     type: 'mix',
     effects: ['bubble', 'gas'],
+    imagination: '無色 CO₂ — 石灰水變混濁',
   },
   'c:hcl+c:koh_aq': {
     compoundId: 'h2o',
@@ -296,6 +307,7 @@ export const manualReactions = {
     phenomenon: '銨鹽與強鹼放出氨氣',
     type: 'mix',
     effects: ['gas', 'bubble'],
+    imagination: 'NH₃↑ — 刺激性氨味',
   },
   'c:kclo3': {
     compoundId: 'kcl',
@@ -312,6 +324,7 @@ export const manualReactions = {
     type: 'mix',
     effects: ['bubble', 'colorChange'],
     effectColor: '#94a3b8',
+    imagination: 'O₂↑ 助燃 — 持燃木条復燃',
     duration: 5,
   },
   'c:feso4_aq+c:naoh': {
@@ -332,7 +345,8 @@ export const manualReactions = {
     compoundId: 'co2',
     phenomenon: 'CaCO₃ + 鹽酸 → 二氧化碳',
     type: 'mix',
-    effects: ['bubble'],
+    effects: ['bubble', 'gas'],
+    imagination: '無色 CO₂ — 石灰水變混濁',
   },
   'Cu+c:agno3': {
     compoundId: 'cu_no3',

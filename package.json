@@ -7,24 +7,29 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "ppt": "marp --no-stdin presentations/CHEM-IS-TRY-專題簡報.md -o presentations/CHEM-IS-TRY-專題簡報.pptx --allow-local-files",
+    "ppt:bg": "powershell -ExecutionPolicy Bypass -File scripts/export-ppt-template-bg.ps1",
+    "ppt:qr": "node scripts/generate-project-qr.mjs",
+    "ppt": "npm run ppt:qr && npm run ppt:bg && marp --no-stdin presentations/CHEM-IS-TRY-專題簡報.md -o presentations/CHEM-IS-TRY-專題簡報.pptx --allow-local-files",
     "generate:elements": "node scripts/generate-element-reactions.mjs",
     "test:reactions": "node scripts/verify-reactions.mjs",
+    "test:beaker": "node scripts/verify-beaker-effects.mjs",
+    "test:visuals": "node scripts/verify-reaction-visuals.mjs",
     "test:formulas": "node scripts/verify-formulas.mjs",
     "test:elements": "node scripts/export-element-reactions.mjs",
     "test:database": "node scripts/import-element-database.mjs",
-    "test:all": "npm run generate:elements && npm run test:formulas && npm run test:reactions && npm run test:elements && npm run test:database"
+    "test:all": "npm run generate:elements && npm run test:formulas && npm run test:reactions && npm run test:beaker && npm run test:visuals && npm run test:elements && npm run test:database"
   },
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "xlsx": "^0.18.5",
     "@marp-team/marp-cli": "^4.4.0",
     "@tailwindcss/vite": "^4.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "qrcode": "^1.5.4",
     "tailwindcss": "^4.0.0",
-    "vite": "^6.0.0"
+    "vite": "^6.0.0",
+    "xlsx": "^0.18.5"
   }
 }

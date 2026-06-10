@@ -7,6 +7,7 @@ export default function PeriodicTable({
   hintElement,
   onHintChange,
   onContextMenu,
+  embedded = false,
 }) {
   const inBeaker = (symbol) =>
     selected?.some(
@@ -19,9 +20,16 @@ export default function PeriodicTable({
     onSelect(symbol)
   }
 
+  const Wrapper = embedded ? 'div' : 'section'
+  const wrapperClass = embedded
+    ? 'lab-bench-periodic overflow-x-auto'
+    : 'game-panel p-4 overflow-x-auto'
+
   return (
-    <section className="game-panel p-4 overflow-x-auto">
-      <h2 className="game-panel-title mb-3">週期表</h2>
+    <Wrapper className={wrapperClass}>
+      <h2 className={embedded ? 'lab-bench-attach-title mb-3' : 'game-panel-title mb-3'}>
+        {embedded ? '元素（週期表）' : '週期表'}
+      </h2>
       <div
         className="inline-grid gap-[3px] min-w-[640px]"
         style={{ gridTemplateColumns: `repeat(${PT_COLS}, minmax(2rem, 1fr))` }}
@@ -65,6 +73,6 @@ export default function PeriodicTable({
           </div>
         ))}
       </div>
-    </section>
+    </Wrapper>
   )
 }

@@ -399,6 +399,27 @@ function buildHalogenReaction(sym, row, nameZh, bag) {
   }
 }
 
+function finalizeVisuals(data, compoundBag) {
+  const fx = data.effects || []
+  if (!fx.length) return data
+
+  const allCompounds = [...baseCompounds, ...compoundBag.values()]
+  const product = allCompounds.find((c) => c.id === data.compoundId)
+
+  if (product?.tone && (fx.includes('precipitate') || fx.includes('colorChange'))) {
+    data.effectColor = product.tone
+  }
+
+  if (fx.includes('gas') && !data.imagination && data.phenomenon?.includes('CO₂')) {
+    data.imagination = '無色 CO₂ — 石灰水變混濁'
+  }
+  if (fx.includes('bubble') && !data.imagination && data.phenomenon?.includes('H₂')) {
+    data.imagination = '無色 H₂↑'
+  }
+
+  return data
+}
+
 function serializeModule(varName, obj) {
   const json = JSON.stringify(obj, null, 2)
   return `/** 自動生成 — 請執行 npm run generate:elements 更新 */\nexport const ${varName} = ${json}\n`
@@ -421,7 +442,7 @@ function main() {
       buildHalogenReaction,
     ]) {
       const rx = build(sym, row, nameZh, compoundBag)
-      if (rx && !reactions[rx.key]) reactions[rx.key] = rx.data
+      if (rx && !reactions[rx.key]) reactions[rx.key] = finalizeVisuals(rx.data, compoundBag)
     }
   }
 

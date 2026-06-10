@@ -275,7 +275,7 @@ export const generatedElementReactions = {
       "colorChange",
       "precipitate"
     ],
-    "effectColor": "#bbdefb",
+    "effectColor": "#dbeafe",
     "duration": 3
   },
   "N+c:h2o": {
@@ -679,7 +679,7 @@ export const generatedElementReactions = {
       "precipitate",
       "colorChange"
     ],
-    "effectColor": "#fff176",
+    "effectColor": "#fef08a",
     "duration": 4
   },
   "S+c:h2o": {
@@ -1165,7 +1165,7 @@ export const generatedElementReactions = {
       "bubble",
       "colorChange"
     ],
-    "effectColor": "#8d6e63",
+    "effectColor": "#84cc16",
     "duration": 3
   },
   "Fe+c:naoh": {
@@ -1303,7 +1303,7 @@ export const generatedElementReactions = {
       "bubble",
       "colorChange"
     ],
-    "effectColor": "#4fc3f7",
+    "effectColor": "#38bdf8",
     "duration": 3
   },
   "Cu+c:naoh": {
@@ -1352,17 +1352,6 @@ export const generatedElementReactions = {
     "effects": [],
     "imagination": "資料庫：視條件而定",
     "duration": 2
-  },
-  "Cl+Zn": {
-    "compoundId": "db_hal_Zn",
-    "phenomenon": "鋅與氯：生成鹵化物 → 鹵化物",
-    "type": "mix",
-    "effects": [
-      "precipitate",
-      "gas"
-    ],
-    "effectColor": "#b0bec5",
-    "duration": 3
   },
   "Ga+O": {
     "compoundId": "db_ox_Ga",
@@ -2192,7 +2181,7 @@ export const generatedElementReactions = {
       "bubble",
       "colorChange"
     ],
-    "effectColor": "#eceff1",
+    "effectColor": "#e2e8f0",
     "duration": 3
   },
   "Ag+c:naoh": {
@@ -3950,7 +3939,7 @@ export const generatedElementReactions = {
       "precipitate",
       "gas"
     ],
-    "effectColor": "#78909c",
+    "effectColor": "#f1f5f9",
     "duration": 3
   },
   "Bi+O": {

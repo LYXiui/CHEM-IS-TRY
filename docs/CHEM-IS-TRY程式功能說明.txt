@@ -49,7 +49,9 @@ src/data/equipment.js   — 實驗器具說明
 
 【文件】
 docs/更新紀錄.txt          — 版本變更
+docs/活動與程式對照.txt    — 各功能對應程式檔案
 docs/化學反應類型與範例.txt — 反應分類例題
+docs/專題演示講稿與實驗示範.txt — 上台演示用
 
 【GitHub】
 見 README.md：.gitignore、LICENSE、Pages 部署
