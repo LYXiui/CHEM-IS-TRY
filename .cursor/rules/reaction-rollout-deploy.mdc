@@ -1,0 +1,39 @@
+---
+description: 反應全庫套用更動並自動部署 GitHub Pages
+alwaysApply: true
+---
+
+# CHEM-IS-TRY：反應更動與自動發布
+
+## 全庫套用（必做）
+
+凡更動**會依條件影響反應行為**，必須讓**所有符合條件**的反應都套用，不可只改示範或單筆：
+
+1. **優先改共用邏輯**：`postReactionBeaker.js`、`getReaction()`、`useLabState.js`、`reactionAnim.js`
+2. **掃描範圍**：`manualReactions.js` + `generated/elementReactions.js`（手動優先於生成）
+3. **對照清單**：`reactionCatalog.js` 中課堂示範反應須可觸發
+4. **判定條件範例**：`effects` 含 gas／沉澱／燃燒、`residue`、`matchTest`、`verificationKind`、需加熱、產物為氣體／溶液
+5. **後續檢驗動畫**：火柴檢驗用 `matchResult`；試劑檢驗用 `verificationKind`（limewater、litmus-acid 等），須有對應 `VerificationStage` 動畫
+
+## 驗證（必跑）
+
+```bash
+npm run test:ci
+npm run build
+```
+
+反應相關更動須確保 `test:post-reaction` 與 `test:reactions` 皆通過。若改生成器，另跑 `npm run generate:elements` 後再驗證。
+
+## 自動發布（完成後必做）
+
+更動完成且測試通過後，**必須**推送至 GitHub，觸發線上更新：
+
+```bash
+npm run release -- -Message "簡短說明此次更動"
+```
+
+或 `powershell -File scripts/release.ps1 -Message "…"`
+
+- 遠端：`origin` → `https://github.com/LYXiui/CHEM-IS-TRY.git`
+- 線上版：`https://lyxiui.github.io/CHEM-IS-TRY/`（push `main` 後由 Actions 部署）
+- 勿略過失敗的測試；勿 force push `main`

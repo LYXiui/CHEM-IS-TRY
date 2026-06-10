@@ -17,7 +17,10 @@
     "test:formulas": "node scripts/verify-formulas.mjs",
     "test:elements": "node scripts/export-element-reactions.mjs",
     "test:database": "node scripts/import-element-database.mjs",
-    "test:all": "npm run generate:elements && npm run test:formulas && npm run test:reactions && npm run test:beaker && npm run test:visuals && npm run test:elements && npm run test:database"
+    "test:post-reaction": "node scripts/verify-post-reaction.mjs",
+    "test:ci": "npm run test:formulas && npm run test:reactions && npm run test:beaker && npm run test:visuals && npm run test:elements && npm run test:database && npm run test:post-reaction",
+    "test:all": "npm run generate:elements && npm run test:ci",
+    "release": "powershell -ExecutionPolicy Bypass -File scripts/release.ps1"
   },
   "dependencies": {
     "react": "^19.0.0",

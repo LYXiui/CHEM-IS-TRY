@@ -1,7 +1,7 @@
 CHEM-IS-TRY — 元素可參與反應一覽（118 種）
 ================================================
-產生：2026-06-05　指令：npm run test:elements
-反應鍵總數：631
+產生：2026-06-10　指令：npm run test:elements
+反應鍵總數：639
 
 說明：
   【直接參與】週期表選該元素，與其他元素或試劑組合可觸發
@@ -397,8 +397,8 @@ H　氫　原子序 1　☁️
   · [試劑 NaOH(aq)] [混合] Og+c:naoh → Og(aq)（鿫水溶液（模型））｜鿫與強鹼：通常微弱或無反應
   · [試劑 HCl(aq)] [混合] c:agno3+c:hcl → AgCl（氯化銀）｜白色沉澱，酸中 AgCl 形成
   · [試劑 H₂SO₄(稀)] [混合] c:bacl2_aq+c:h2so4_dil → BaSO₄（硫酸鋇）｜白色 BaSO₄ 沉澱
-  · [試劑 HCl(aq)] [混合] Zn+c:hcl → ZnCl₂（氯化鋅）｜鋅與鹽酸生成 ZnCl₂ 並放氫（簡化）
-  · [試劑 H₂SO₄(稀)] [混合] Zn+c:h2so4_dil → ZnCl₂（氯化鋅）｜鋅與稀硫酸反應
+  · [試劑 HCl(aq)] [混合] Zn+c:hcl → ZnCl₂（氯化鋅）｜鋅與鹽酸生成 ZnCl₂ 並放 H₂↑（簡化）
+  · [試劑 H₂SO₄(稀)] [混合] Zn+c:h2so4_dil → ZnCl₂（氯化鋅）｜鋅與稀硫酸反應放 H₂↑
   · [試劑 H₂SO₄(稀)] [混合] Pb+c:h2so4_dil → PbSO₄（硫酸鉛）｜鉛與稀硫酸生成 PbSO₄ 沉澱
   · [試劑 H₂SO₄(稀)] [混合] Ca+c:h2so4_dil → CaSO₄（硫酸鈣）｜鈣與稀硫酸生成微溶 CaSO₄
   · [試劑 NaOH(aq)] [混合] c:cuso4_aq+c:naoh → Cu(OH)₂（氫氧化銅）｜藍色 Cu(OH)₂ 沉澱
@@ -406,7 +406,7 @@ H　氫　原子序 1　☁️
   · [試劑 CH₄] [燃燒·燃燒需火柴] O+c:ch4 → CO₂（二氧化碳）｜甲烷燃燒：CH₄ + 2O₂ → CO₂ + 2H₂O
   · [試劑 C₂H₅OH] [燃燒·燃燒需火柴] O+c:c2h5oh → CO₂（二氧化碳）｜乙醇燃燒生成 CO₂ 與水
   · [試劑 H₂O₂(aq)] [混合] c:h2o2_aq+c:kmno4_aq → H₂O（蒸餾水）｜紫褪色，催化分解
-  · [試劑 HCl(aq)] [混合] c:caco3+c:hcl → CaCl₂(aq)（氯化鈣）｜碳酸鈣與鹽酸：CaCl₂ + CO₂↑ + H₂O
+  · [試劑 HCl(aq)] [混合] c:caco3+c:hcl → CaCl₂(aq)（氯化鈣）｜碳酸鈣與鹽酸：CaCl₂(aq) + CO₂↑ + H₂O
   · [試劑 HCl(aq)] [混合] c:hcl+c:na2co3_aq → CO₂（二氧化碳）｜碳酸鈉與鹽酸放出 CO₂
   · [試劑 HCl(aq)] [混合] c:hcl+c:koh_aq → H₂O（蒸餾水）｜KOH 與鹽酸中和
   · [試劑 KOH(aq)] [混合] c:hcl+c:koh_aq → H₂O（蒸餾水）｜KOH 與鹽酸中和
@@ -414,9 +414,9 @@ H　氫　原子序 1　☁️
   · [試劑 NaOH(aq)] [混合] c:ch3cooh+c:naoh → CH₃COONa（乙酸鈉）｜乙酸與氫氧化鈉中和
   · [試劑 H₃PO₄(稀)] [混合] c:h3po4_dil+c:naoh → H₂O（蒸餾水）｜磷酸與強鹼中和（簡化為水）
   · [試劑 NaOH(aq)] [混合] c:h3po4_dil+c:naoh → H₂O（蒸餾水）｜磷酸與強鹼中和（簡化為水）
-  · [試劑 NaOH(aq)] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出氨氣
-  · [試劑 NH₄Cl] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出氨氣
-  · [試劑 H₂O₂(aq)] [混合] c:h2o2_aq+c:mno2 → H₂O（蒸餾水）｜MnO₂ 催化分解過氧化氫
+  · [試劑 NaOH(aq)] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出 NH₃↑
+  · [試劑 NH₄Cl] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出 NH₃↑
+  · [試劑 H₂O₂(aq)] [混合] c:h2o2_aq+c:mno2 → H₂O（蒸餾水）｜MnO₂ 催化分解過氧化氫：2H₂O₂ → 2H₂O + O₂↑
   · [試劑 NaOH(aq)] [混合] c:feso4_aq+c:naoh → Fe(OH)₂（氫氧化亞鐵）｜亞鐵鹽與鹼生成 Fe(OH)₂ 沉澱
   · [試劑 NaOH(aq)] [混合] c:naoh+c:znso4_aq → ZnCl₂（氯化鋅）｜鋅鹽與強鹼（簡化模型）
   · [試劑 HNO₃] [混合] Cu+c:hno3 → Cu(NO₃)₂（硝酸銅）｜銅溶解，溶液呈藍綠色，棕色 NO₂ 煙霧（模型）
@@ -429,6 +429,20 @@ H　氫　原子序 1　☁️
   · [試劑 H₂SO₄(稀)] [混合] c:h2so4_dil+c:naoh → H₂O（蒸餾水）｜強鹼與稀硫酸中和
   · [試劑 NaOH(aq)] [混合] c:h2so4_dil+c:naoh → H₂O（蒸餾水）｜強鹼與稀硫酸中和
   · [試劑 HNO₃] [混合] Ag+c:hno3 → AgNO₃(aq)（硝酸銀溶液）｜銀溶於硝酸（模型）
+  · [試劑 Ca(OH)₂(aq)] [混合] c:caoh2_aq+c:co2 → CaCO₃（碳酸鈣）｜CO₂ 通入澄清石灰水：生成 CaCO₃ 白色沉澱，溶液變混濁
+  · [試劑 Ca(OH)₂(aq)] [混合] c:co2+c:caoh2_aq → CaCO₃（碳酸鈣）｜CO₂ 通入澄清石灰水：溶液變混濁
+  · [試劑 石蕊] [混合] c:litmus+c:hcl → H₂O（蒸餾水）｜石蕊試液遇酸：由紫變紅
+  · [試劑 HCl(aq)] [混合] c:litmus+c:hcl → H₂O（蒸餾水）｜石蕊試液遇酸：由紫變紅
+  · [試劑 HCl(aq)] [混合] c:hcl+c:litmus → H₂O（蒸餾水）｜鹽酸使石蕊變紅
+  · [試劑 石蕊] [混合] c:hcl+c:litmus → H₂O（蒸餾水）｜鹽酸使石蕊變紅
+  · [試劑 石蕊] [混合] c:litmus+c:naoh → H₂O（蒸餾水）｜石蕊試液遇鹼：由紫變藍
+  · [試劑 NaOH(aq)] [混合] c:litmus+c:naoh → H₂O（蒸餾水）｜石蕊試液遇鹼：由紫變藍
+  · [試劑 NaOH(aq)] [混合] c:naoh+c:litmus → H₂O（蒸餾水）｜NaOH 使石蕊變藍
+  · [試劑 石蕊] [混合] c:naoh+c:litmus → H₂O（蒸餾水）｜NaOH 使石蕊變藍
+  · [試劑 指示劑] [混合] c:phenolphthalein+c:naoh → H₂O（蒸餾水）｜酚酞遇鹼：無色變粉紅（簡化模型）
+  · [試劑 NaOH(aq)] [混合] c:phenolphthalein+c:naoh → H₂O（蒸餾水）｜酚酞遇鹼：無色變粉紅（簡化模型）
+  · [試劑 NaOH(aq)] [混合] c:naoh+c:phenolphthalein → H₂O（蒸餾水）｜酚酞遇 NaOH 呈紅色
+  · [試劑 指示劑] [混合] c:naoh+c:phenolphthalein → H₂O（蒸餾水）｜酚酞遇 NaOH 呈紅色
 
 【相關解鎖物質】
   · NH₃（氨）
@@ -532,13 +546,21 @@ C　碳　原子序 6　🪨
   · [混合] C+H+O → C₂H₅OH（乙醇）｜乙醇（發酵或合成）
 
 【經試劑／化合物參與】
-  · [試劑 CaCO₃] [混合·需酒精燈] c:caco3 → CO₂（二氧化碳）｜高溫分解碳酸鈣（CaCO₃ → CaO + CO₂，簡化）
+  · [試劑 CaCO₃] [混合·需酒精燈] c:caco3 → CO₂（二氧化碳）｜高溫分解：CaCO₃ → CaO + CO₂↑
   · [試劑 CH₄] [燃燒·燃燒需火柴] O+c:ch4 → CO₂（二氧化碳）｜甲烷燃燒：CH₄ + 2O₂ → CO₂ + 2H₂O
   · [試劑 C₂H₅OH] [燃燒·燃燒需火柴] O+c:c2h5oh → CO₂（二氧化碳）｜乙醇燃燒生成 CO₂ 與水
-  · [試劑 CaCO₃] [混合] c:caco3+c:hcl → CaCl₂(aq)（氯化鈣）｜碳酸鈣與鹽酸：CaCl₂ + CO₂↑ + H₂O
+  · [試劑 CaCO₃] [混合] c:caco3+c:hcl → CaCl₂(aq)（氯化鈣）｜碳酸鈣與鹽酸：CaCl₂(aq) + CO₂↑ + H₂O
   · [試劑 Na₂CO₃(aq)] [混合] c:hcl+c:na2co3_aq → CO₂（二氧化碳）｜碳酸鈉與鹽酸放出 CO₂
   · [試劑 CH₃COOH] [混合] c:ch3cooh+c:naoh → CH₃COONa（乙酸鈉）｜乙酸與氫氧化鈉中和
   · [試劑 CaCO₃] [混合] Cl+H+c:caco3 → CO₂（二氧化碳）｜CaCO₃ + 鹽酸 → 二氧化碳
+  · [試劑 CO₂] [混合] c:caoh2_aq+c:co2 → CaCO₃（碳酸鈣）｜CO₂ 通入澄清石灰水：生成 CaCO₃ 白色沉澱，溶液變混濁
+  · [試劑 CO₂] [混合] c:co2+c:caoh2_aq → CaCO₃（碳酸鈣）｜CO₂ 通入澄清石灰水：溶液變混濁
+  · [試劑 石蕊] [混合] c:litmus+c:hcl → H₂O（蒸餾水）｜石蕊試液遇酸：由紫變紅
+  · [試劑 石蕊] [混合] c:hcl+c:litmus → H₂O（蒸餾水）｜鹽酸使石蕊變紅
+  · [試劑 石蕊] [混合] c:litmus+c:naoh → H₂O（蒸餾水）｜石蕊試液遇鹼：由紫變藍
+  · [試劑 石蕊] [混合] c:naoh+c:litmus → H₂O（蒸餾水）｜NaOH 使石蕊變藍
+  · [試劑 指示劑] [混合] c:phenolphthalein+c:naoh → H₂O（蒸餾水）｜酚酞遇鹼：無色變粉紅（簡化模型）
+  · [試劑 指示劑] [混合] c:naoh+c:phenolphthalein → H₂O（蒸餾水）｜酚酞遇 NaOH 呈紅色
 
 【相關解鎖物質】
   · CO₂（二氧化碳）
@@ -572,11 +594,15 @@ N　氮　原子序 7　☁️
   · [試劑 AgNO₃(aq)] [混合] c:agno3+c:hcl → AgCl（氯化銀）｜白色沉澱，酸中 AgCl 形成
   · [試劑 AgNO₃(aq)] [混合] c:agno3+c:nacl → AgCl（氯化銀）｜白色 AgCl↓（經典檢驗 Cl⁻）
   · [試劑 AgNO₃(aq)] [混合] c:agno3+c:nacl_aq → AgCl（氯化銀）｜白色 AgCl 沉澱
-  · [試劑 NH₄Cl] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出氨氣
+  · [試劑 NH₄Cl] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出 NH₃↑
   · [試劑 AgNO₃(aq)] [混合] Cu+c:agno3 → Cu(NO₃)₂（硝酸銅）｜藍色溶液，銅置換銀（簡化）
   · [試劑 HNO₃] [混合] Cu+c:hno3 → Cu(NO₃)₂（硝酸銅）｜銅溶解，溶液呈藍綠色，棕色 NO₂ 煙霧（模型）
   · [試劑 HNO₃] [混合] Na+c:hno3 → NaNO₃（硝酸鈉）｜酸鹼中和生成硝酸鈉溶液
   · [試劑 HNO₃] [混合] Ag+c:hno3 → AgNO₃(aq)（硝酸銀溶液）｜銀溶於硝酸（模型）
+  · [試劑 石蕊] [混合] c:litmus+c:hcl → H₂O（蒸餾水）｜石蕊試液遇酸：由紫變紅
+  · [試劑 石蕊] [混合] c:hcl+c:litmus → H₂O（蒸餾水）｜鹽酸使石蕊變紅
+  · [試劑 石蕊] [混合] c:litmus+c:naoh → H₂O（蒸餾水）｜石蕊試液遇鹼：由紫變藍
+  · [試劑 石蕊] [混合] c:naoh+c:litmus → H₂O（蒸餾水）｜NaOH 使石蕊變藍
 
 【相關解鎖物質】
   · NH₃（氨）
@@ -986,26 +1012,26 @@ O　氧　原子序 8　☁️
   · [試劑 AgNO₃(aq)] [混合] c:agno3+c:nacl_aq → AgCl（氯化銀）｜白色 AgCl 沉澱
   · [試劑 H₂SO₄(稀)] [混合] c:bacl2_aq+c:h2so4_dil → BaSO₄（硫酸鋇）｜白色 BaSO₄ 沉澱
   · [試劑 CuSO₄(aq)] [混合] Fe+c:cuso4_aq → FeCl₂(aq)（氯化亞鐵）｜鐵置換銅：藍色溶液變淡綠（Fe + CuSO₄ → FeSO₄ + Cu）
-  · [試劑 H₂SO₄(稀)] [混合] Zn+c:h2so4_dil → ZnCl₂（氯化鋅）｜鋅與稀硫酸反應
+  · [試劑 H₂SO₄(稀)] [混合] Zn+c:h2so4_dil → ZnCl₂（氯化鋅）｜鋅與稀硫酸反應放 H₂↑
   · [試劑 H₂SO₄(稀)] [混合] Pb+c:h2so4_dil → PbSO₄（硫酸鉛）｜鉛與稀硫酸生成 PbSO₄ 沉澱
   · [試劑 H₂SO₄(稀)] [混合] Ca+c:h2so4_dil → CaSO₄（硫酸鈣）｜鈣與稀硫酸生成微溶 CaSO₄
   · [試劑 CuSO₄(aq)] [混合] c:cuso4_aq+c:naoh → Cu(OH)₂（氫氧化銅）｜藍色 Cu(OH)₂ 沉澱
   · [試劑 NaOH(aq)] [混合] c:cuso4_aq+c:naoh → Cu(OH)₂（氫氧化銅）｜藍色 Cu(OH)₂ 沉澱
-  · [試劑 CaCO₃] [混合·需酒精燈] c:caco3 → CO₂（二氧化碳）｜高溫分解碳酸鈣（CaCO₃ → CaO + CO₂，簡化）
+  · [試劑 CaCO₃] [混合·需酒精燈] c:caco3 → CO₂（二氧化碳）｜高溫分解：CaCO₃ → CaO + CO₂↑
   · [試劑 H₂O] [混合·需酒精燈] c:h2o → H₂（氫氣）｜高溫／通電分解水（簡化為氫氣）
   · [試劑 H₂O₂(aq)] [混合] c:h2o2_aq+c:kmno4_aq → H₂O（蒸餾水）｜紫褪色，催化分解
   · [試劑 KMnO₄(aq)] [混合] c:h2o2_aq+c:kmno4_aq → H₂O（蒸餾水）｜紫褪色，催化分解
-  · [試劑 CaCO₃] [混合] c:caco3+c:hcl → CaCl₂(aq)（氯化鈣）｜碳酸鈣與鹽酸：CaCl₂ + CO₂↑ + H₂O
+  · [試劑 CaCO₃] [混合] c:caco3+c:hcl → CaCl₂(aq)（氯化鈣）｜碳酸鈣與鹽酸：CaCl₂(aq) + CO₂↑ + H₂O
   · [試劑 Na₂CO₃(aq)] [混合] c:hcl+c:na2co3_aq → CO₂（二氧化碳）｜碳酸鈉與鹽酸放出 CO₂
   · [試劑 KOH(aq)] [混合] c:hcl+c:koh_aq → H₂O（蒸餾水）｜KOH 與鹽酸中和
   · [試劑 CH₃COOH] [混合] c:ch3cooh+c:naoh → CH₃COONa（乙酸鈉）｜乙酸與氫氧化鈉中和
   · [試劑 NaOH(aq)] [混合] c:ch3cooh+c:naoh → CH₃COONa（乙酸鈉）｜乙酸與氫氧化鈉中和
   · [試劑 H₃PO₄(稀)] [混合] c:h3po4_dil+c:naoh → H₂O（蒸餾水）｜磷酸與強鹼中和（簡化為水）
   · [試劑 NaOH(aq)] [混合] c:h3po4_dil+c:naoh → H₂O（蒸餾水）｜磷酸與強鹼中和（簡化為水）
-  · [試劑 NaOH(aq)] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出氨氣
+  · [試劑 NaOH(aq)] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出 NH₃↑
   · [試劑 KClO₃] [混合·需酒精燈] c:kclo3 → KCl（氯化鉀）｜加熱氯酸鉀分解（2KClO₃ → 2KCl + 3O₂↑）
-  · [試劑 H₂O₂(aq)] [混合] c:h2o2_aq+c:mno2 → H₂O（蒸餾水）｜MnO₂ 催化分解過氧化氫
-  · [試劑 MnO₂] [混合] c:h2o2_aq+c:mno2 → H₂O（蒸餾水）｜MnO₂ 催化分解過氧化氫
+  · [試劑 H₂O₂(aq)] [混合] c:h2o2_aq+c:mno2 → H₂O（蒸餾水）｜MnO₂ 催化分解過氧化氫：2H₂O₂ → 2H₂O + O₂↑
+  · [試劑 MnO₂] [混合] c:h2o2_aq+c:mno2 → H₂O（蒸餾水）｜MnO₂ 催化分解過氧化氫：2H₂O₂ → 2H₂O + O₂↑
   · [試劑 FeSO₄(aq)] [混合] c:feso4_aq+c:naoh → Fe(OH)₂（氫氧化亞鐵）｜亞鐵鹽與鹼生成 Fe(OH)₂ 沉澱
   · [試劑 NaOH(aq)] [混合] c:feso4_aq+c:naoh → Fe(OH)₂（氫氧化亞鐵）｜亞鐵鹽與鹼生成 Fe(OH)₂ 沉澱
   · [試劑 NaOH(aq)] [混合] c:naoh+c:znso4_aq → ZnCl₂（氯化鋅）｜鋅鹽與強鹼（簡化模型）
@@ -1021,6 +1047,20 @@ O　氧　原子序 8　☁️
   · [試劑 H₂SO₄(稀)] [混合] c:h2so4_dil+c:naoh → H₂O（蒸餾水）｜強鹼與稀硫酸中和
   · [試劑 NaOH(aq)] [混合] c:h2so4_dil+c:naoh → H₂O（蒸餾水）｜強鹼與稀硫酸中和
   · [試劑 HNO₃] [混合] Ag+c:hno3 → AgNO₃(aq)（硝酸銀溶液）｜銀溶於硝酸（模型）
+  · [試劑 Ca(OH)₂(aq)] [混合] c:caoh2_aq+c:co2 → CaCO₃（碳酸鈣）｜CO₂ 通入澄清石灰水：生成 CaCO₃ 白色沉澱，溶液變混濁
+  · [試劑 CO₂] [混合] c:caoh2_aq+c:co2 → CaCO₃（碳酸鈣）｜CO₂ 通入澄清石灰水：生成 CaCO₃ 白色沉澱，溶液變混濁
+  · [試劑 CO₂] [混合] c:co2+c:caoh2_aq → CaCO₃（碳酸鈣）｜CO₂ 通入澄清石灰水：溶液變混濁
+  · [試劑 Ca(OH)₂(aq)] [混合] c:co2+c:caoh2_aq → CaCO₃（碳酸鈣）｜CO₂ 通入澄清石灰水：溶液變混濁
+  · [試劑 石蕊] [混合] c:litmus+c:hcl → H₂O（蒸餾水）｜石蕊試液遇酸：由紫變紅
+  · [試劑 石蕊] [混合] c:hcl+c:litmus → H₂O（蒸餾水）｜鹽酸使石蕊變紅
+  · [試劑 石蕊] [混合] c:litmus+c:naoh → H₂O（蒸餾水）｜石蕊試液遇鹼：由紫變藍
+  · [試劑 NaOH(aq)] [混合] c:litmus+c:naoh → H₂O（蒸餾水）｜石蕊試液遇鹼：由紫變藍
+  · [試劑 NaOH(aq)] [混合] c:naoh+c:litmus → H₂O（蒸餾水）｜NaOH 使石蕊變藍
+  · [試劑 石蕊] [混合] c:naoh+c:litmus → H₂O（蒸餾水）｜NaOH 使石蕊變藍
+  · [試劑 指示劑] [混合] c:phenolphthalein+c:naoh → H₂O（蒸餾水）｜酚酞遇鹼：無色變粉紅（簡化模型）
+  · [試劑 NaOH(aq)] [混合] c:phenolphthalein+c:naoh → H₂O（蒸餾水）｜酚酞遇鹼：無色變粉紅（簡化模型）
+  · [試劑 NaOH(aq)] [混合] c:naoh+c:phenolphthalein → H₂O（蒸餾水）｜酚酞遇 NaOH 呈紅色
+  · [試劑 指示劑] [混合] c:naoh+c:phenolphthalein → H₂O（蒸餾水）｜酚酞遇 NaOH 呈紅色
 
 【想像提示】
   · 提示：惰性氣體幾乎不反應…
@@ -1199,11 +1239,15 @@ Na　鈉　原子序 11　🪨
   · [試劑 Na₂CO₃(aq)] [混合] c:hcl+c:na2co3_aq → CO₂（二氧化碳）｜碳酸鈉與鹽酸放出 CO₂
   · [試劑 NaOH(aq)] [混合] c:ch3cooh+c:naoh → CH₃COONa（乙酸鈉）｜乙酸與氫氧化鈉中和
   · [試劑 NaOH(aq)] [混合] c:h3po4_dil+c:naoh → H₂O（蒸餾水）｜磷酸與強鹼中和（簡化為水）
-  · [試劑 NaOH(aq)] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出氨氣
+  · [試劑 NaOH(aq)] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出 NH₃↑
   · [試劑 NaOH(aq)] [混合] c:feso4_aq+c:naoh → Fe(OH)₂（氫氧化亞鐵）｜亞鐵鹽與鹼生成 Fe(OH)₂ 沉澱
   · [試劑 NaOH(aq)] [混合] c:naoh+c:znso4_aq → ZnCl₂（氯化鋅）｜鋅鹽與強鹼（簡化模型）
   · [試劑 NaOH(aq)] [混合·需酒精燈] c:hcl+c:naoh → H₂O（蒸餾水）｜酸鹼中和放熱，生成食鹽水
   · [試劑 NaOH(aq)] [混合] c:h2so4_dil+c:naoh → H₂O（蒸餾水）｜強鹼與稀硫酸中和
+  · [試劑 NaOH(aq)] [混合] c:litmus+c:naoh → H₂O（蒸餾水）｜石蕊試液遇鹼：由紫變藍
+  · [試劑 NaOH(aq)] [混合] c:naoh+c:litmus → H₂O（蒸餾水）｜NaOH 使石蕊變藍
+  · [試劑 NaOH(aq)] [混合] c:phenolphthalein+c:naoh → H₂O（蒸餾水）｜酚酞遇鹼：無色變粉紅（簡化模型）
+  · [試劑 NaOH(aq)] [混合] c:naoh+c:phenolphthalein → H₂O（蒸餾水）｜酚酞遇 NaOH 呈紅色
 
 【想像提示】
   · 提示：兩種鹼金屬極危險，僅限模擬！
@@ -1308,7 +1352,7 @@ S　硫　原子序 16　🪨
 【經試劑／化合物參與】
   · [試劑 H₂SO₄(稀)] [混合] c:bacl2_aq+c:h2so4_dil → BaSO₄（硫酸鋇）｜白色 BaSO₄ 沉澱
   · [試劑 CuSO₄(aq)] [混合] Fe+c:cuso4_aq → FeCl₂(aq)（氯化亞鐵）｜鐵置換銅：藍色溶液變淡綠（Fe + CuSO₄ → FeSO₄ + Cu）
-  · [試劑 H₂SO₄(稀)] [混合] Zn+c:h2so4_dil → ZnCl₂（氯化鋅）｜鋅與稀硫酸反應
+  · [試劑 H₂SO₄(稀)] [混合] Zn+c:h2so4_dil → ZnCl₂（氯化鋅）｜鋅與稀硫酸反應放 H₂↑
   · [試劑 H₂SO₄(稀)] [混合] Pb+c:h2so4_dil → PbSO₄（硫酸鉛）｜鉛與稀硫酸生成 PbSO₄ 沉澱
   · [試劑 H₂SO₄(稀)] [混合] Ca+c:h2so4_dil → CaSO₄（硫酸鈣）｜鈣與稀硫酸生成微溶 CaSO₄
   · [試劑 CuSO₄(aq)] [混合] c:cuso4_aq+c:naoh → Cu(OH)₂（氫氧化銅）｜藍色 Cu(OH)₂ 沉澱
@@ -1368,7 +1412,6 @@ Cl　氯　原子序 17　☁️
   · [混合] Cl+Co → CoCl（氯化鈷）｜鈷與氯：生成鹵化物 → 鹵化物
   · [混合] Cl+Ni → NiCl（氯化鎳）｜鎳與氯：生成鹵化物 → 鹵化物
   · [混合] Cl+Cu → CuCl（氯化銅）｜銅與氯：生成鹵化物 → 鹵化物
-  · [混合] Cl+Zn → ZnCl（氯化鋅）｜鋅與氯：生成鹵化物 → 鹵化物
   · [混合] Cl+Ga → GaCl（氯化鎵）｜鎵與氯：生成鹵化物 → 鹵化物
   · [混合] Cl+Ge → GeCl（氯化鍺）｜鍺與氯：生成鹵化物 → 鹵化物
   · [混合] As+Cl → AsCl（氯化砷）｜砷與氯：生成鹵化物 → 鹵化物
@@ -1461,6 +1504,7 @@ Cl　氯　原子序 17　☁️
   · [混合] Ag+Cl → AgCl（氯化銀）｜白色氯化銀沉澱
   · [混合] Cl+c:agno3 → AgCl（氯化銀）｜白色 AgCl 沉澱（硝酸銀 + 氯離子）
   · [混合] Pb+Cl → PbCl₂（氯化鉛）｜鉛與氯生成白色 PbCl₂ 沉澱
+  · [混合] Cl+Zn → ZnCl₂（氯化鋅）｜鋅與氯氣化合，生成 ZnCl₂（放熱）
   · [混合] Cl+H+c:caco3 → CO₂（二氧化碳）｜CaCO₃ + 鹽酸 → 二氧化碳
 
 【經試劑／化合物參與】
@@ -1584,13 +1628,15 @@ Cl　氯　原子序 17　☁️
   · [試劑 NaCl] [混合] c:agno3+c:nacl → AgCl（氯化銀）｜白色 AgCl↓（經典檢驗 Cl⁻）
   · [試劑 NaCl(aq)] [混合] c:agno3+c:nacl_aq → AgCl（氯化銀）｜白色 AgCl 沉澱
   · [試劑 BaCl₂(aq)] [混合] c:bacl2_aq+c:h2so4_dil → BaSO₄（硫酸鋇）｜白色 BaSO₄ 沉澱
-  · [試劑 HCl(aq)] [混合] Zn+c:hcl → ZnCl₂（氯化鋅）｜鋅與鹽酸生成 ZnCl₂ 並放氫（簡化）
-  · [試劑 HCl(aq)] [混合] c:caco3+c:hcl → CaCl₂(aq)（氯化鈣）｜碳酸鈣與鹽酸：CaCl₂ + CO₂↑ + H₂O
+  · [試劑 HCl(aq)] [混合] Zn+c:hcl → ZnCl₂（氯化鋅）｜鋅與鹽酸生成 ZnCl₂ 並放 H₂↑（簡化）
+  · [試劑 HCl(aq)] [混合] c:caco3+c:hcl → CaCl₂(aq)（氯化鈣）｜碳酸鈣與鹽酸：CaCl₂(aq) + CO₂↑ + H₂O
   · [試劑 HCl(aq)] [混合] c:hcl+c:na2co3_aq → CO₂（二氧化碳）｜碳酸鈉與鹽酸放出 CO₂
   · [試劑 HCl(aq)] [混合] c:hcl+c:koh_aq → H₂O（蒸餾水）｜KOH 與鹽酸中和
-  · [試劑 NH₄Cl] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出氨氣
+  · [試劑 NH₄Cl] [混合] c:naoh+c:nh4cl → NH₃（氨）｜銨鹽與強鹼放出 NH₃↑
   · [試劑 KClO₃] [混合·需酒精燈] c:kclo3 → KCl（氯化鉀）｜加熱氯酸鉀分解（2KClO₃ → 2KCl + 3O₂↑）
   · [試劑 HCl(aq)] [混合·需酒精燈] c:hcl+c:naoh → H₂O（蒸餾水）｜酸鹼中和放熱，生成食鹽水
+  · [試劑 HCl(aq)] [混合] c:litmus+c:hcl → H₂O（蒸餾水）｜石蕊試液遇酸：由紫變紅
+  · [試劑 HCl(aq)] [混合] c:hcl+c:litmus → H₂O（蒸餾水）｜鹽酸使石蕊變紅
 
 ────────────────────────────────────────
 Ar　氬　原子序 18　☁️ 
@@ -1653,11 +1699,14 @@ Ca　鈣　原子序 20　🪨
   · [混合] Ca+c:h2so4_dil → CaSO₄（硫酸鈣）｜鈣與稀硫酸生成微溶 CaSO₄
 
 【經試劑／化合物參與】
-  · [試劑 CaCO₃] [混合·需酒精燈] c:caco3 → CO₂（二氧化碳）｜高溫分解碳酸鈣（CaCO₃ → CaO + CO₂，簡化）
-  · [試劑 CaCO₃] [混合] c:caco3+c:hcl → CaCl₂(aq)（氯化鈣）｜碳酸鈣與鹽酸：CaCl₂ + CO₂↑ + H₂O
+  · [試劑 CaCO₃] [混合·需酒精燈] c:caco3 → CO₂（二氧化碳）｜高溫分解：CaCO₃ → CaO + CO₂↑
+  · [試劑 CaCO₃] [混合] c:caco3+c:hcl → CaCl₂(aq)（氯化鈣）｜碳酸鈣與鹽酸：CaCl₂(aq) + CO₂↑ + H₂O
   · [試劑 CaCO₃] [混合] Cl+H+c:caco3 → CO₂（二氧化碳）｜CaCO₃ + 鹽酸 → 二氧化碳
+  · [試劑 Ca(OH)₂(aq)] [混合] c:caoh2_aq+c:co2 → CaCO₃（碳酸鈣）｜CO₂ 通入澄清石灰水：生成 CaCO₃ 白色沉澱，溶液變混濁
+  · [試劑 Ca(OH)₂(aq)] [混合] c:co2+c:caoh2_aq → CaCO₃（碳酸鈣）｜CO₂ 通入澄清石灰水：溶液變混濁
 
 【相關解鎖物質】
+  · CaO（氧化鈣）
   · CaSO₄（硫酸鈣）
   · CaCl₂(aq)（氯化鈣）
   · Ca(aq)（鈣水溶液（模型））
@@ -1744,7 +1793,7 @@ Mn　錳　原子序 25　🪨
 
 【經試劑／化合物參與】
   · [試劑 KMnO₄(aq)] [混合] c:h2o2_aq+c:kmno4_aq → H₂O（蒸餾水）｜紫褪色，催化分解
-  · [試劑 MnO₂] [混合] c:h2o2_aq+c:mno2 → H₂O（蒸餾水）｜MnO₂ 催化分解過氧化氫
+  · [試劑 MnO₂] [混合] c:h2o2_aq+c:mno2 → H₂O（蒸餾水）｜MnO₂ 催化分解過氧化氫：2H₂O₂ → 2H₂O + O₂↑
 
 【相關解鎖物質】
   · Mn(aq)（錳水溶液（模型））
@@ -1847,9 +1896,9 @@ Zn　鋅　原子序 30　🪨
   · [混合] O+Zn → Zn₂O（氧化鋅）｜鋅氧化：適當條件下生成氧化物（氧化物）
   · [混合] Zn+c:h2o → Zn(aq)（鋅水溶液（模型））｜鋅與水：室溫幾乎不反應
   · [混合] Zn+c:naoh → Zn(aq)（鋅水溶液（模型））｜鋅與強鹼：通常微弱或無反應
-  · [混合] Cl+Zn → ZnCl（氯化鋅）｜鋅與氯：生成鹵化物 → 鹵化物
-  · [混合] Zn+c:hcl → ZnCl₂（氯化鋅）｜鋅與鹽酸生成 ZnCl₂ 並放氫（簡化）
-  · [混合] Zn+c:h2so4_dil → ZnCl₂（氯化鋅）｜鋅與稀硫酸反應
+  · [混合] Zn+c:hcl → ZnCl₂（氯化鋅）｜鋅與鹽酸生成 ZnCl₂ 並放 H₂↑（簡化）
+  · [混合] Zn+c:h2so4_dil → ZnCl₂（氯化鋅）｜鋅與稀硫酸反應放 H₂↑
+  · [混合] Cl+Zn → ZnCl₂（氯化鋅）｜鋅與氯氣化合，生成 ZnCl₂（放熱）
 
 【經試劑／化合物參與】
   · [試劑 ZnSO₄(aq)] [混合] c:naoh+c:znso4_aq → ZnCl₂（氯化鋅）｜鋅鹽與強鹼（簡化模型）
@@ -1857,7 +1906,6 @@ Zn　鋅　原子序 30　🪨
 【相關解鎖物質】
   · ZnCl₂（氯化鋅）
   · Zn(aq)（鋅水溶液（模型））
-  · ZnCl（氯化鋅）
   · Zn₂O（氧化鋅）
 
 ────────────────────────────────────────

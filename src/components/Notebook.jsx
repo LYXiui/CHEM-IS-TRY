@@ -29,27 +29,8 @@ function resolveEntry(e) {
 function NotebookEntryDetail({ entry, onReplay }) {
   const { formula, name, canReplay, hasProcess } = resolveEntry(entry)
 
-  const handleReplay = () => {
-    if (canReplay) onReplay(entry)
-  }
-
   return (
-    <div
-      className={`notebook-detail ${canReplay ? 'notebook-detail-replayable' : ''}`}
-      role={canReplay ? 'button' : undefined}
-      tabIndex={canReplay ? 0 : undefined}
-      onClick={canReplay ? handleReplay : undefined}
-      onKeyDown={
-        canReplay
-          ? (ev) => {
-              if (ev.key === 'Enter' || ev.key === ' ') {
-                ev.preventDefault()
-                handleReplay()
-              }
-            }
-          : undefined
-      }
-    >
+    <div className="notebook-detail">
       <p className="notebook-detail-meta">
         <time>{formatTime(entry.time)}</time>
         {entry.note && <span> · {entry.note}</span>}
@@ -70,7 +51,11 @@ function NotebookEntryDetail({ entry, onReplay }) {
         </div>
       )}
 
-      {canReplay && <p className="notebook-detail-hint">點擊此處重現實驗</p>}
+      {canReplay && (
+        <button type="button" className="notebook-replay-btn" onClick={() => onReplay(entry)}>
+          重做實驗
+        </button>
+      )}
       {!canReplay && <p className="notebook-detail-hint muted">此筆記無法重現</p>}
     </div>
   )
@@ -116,7 +101,7 @@ function NotebookListView({ notebook, onReplay }) {
                 </ul>
                 {canReplay && (
                   <button type="button" className="notebook-replay-btn" onClick={() => onReplay(e)}>
-                    重現此實驗
+                    重做實驗
                   </button>
                 )}
               </div>
@@ -211,7 +196,7 @@ function NotebookDropdownView({ notebook, onReplay, onCloseMenu }) {
           <NotebookEntryDetail entry={selectedEntry} onReplay={onReplay} />
         </div>
       ) : (
-        <p className="notebook-dropdown-hint">從上方選單點選化學式，即可查看實驗內容並重現</p>
+        <p className="notebook-dropdown-hint">從上方選單點選化學式，可查看過程並重做實驗</p>
       )}
     </div>
   )

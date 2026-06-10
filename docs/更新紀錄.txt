@@ -3,6 +3,17 @@ CHEM-IS-TRY 更新紀錄
 （每次版本更新請於本檔最上方新增一節）
 
 ────────────────────────────────────────
+V7.0 — 2026-06-04
+────────────────────────────────────────
+【反應全庫套用與自動發布】
+- 產物保留：postReactionBeaker.js 全庫自動推斷 + 手動 residue
+- 火柴檢驗：matchTestReactions.js（CO₂／H₂／O₂／CH₄／NH₃／SO₂）
+- verify-post-reaction.mjs：274 筆應保留反應全數通過
+- AGENTS.md、.cursor/rules/reaction-rollout-deploy.mdc：更動須掃描全庫並 release
+- scripts/release.ps1、npm run test:ci / release：測試→建置→push→GitHub Pages
+- deploy.yml：部署前先跑 test:ci
+
+────────────────────────────────────────
 V6.9 — 2026-06-09
 ────────────────────────────────────────
 【燒杯動畫強化】

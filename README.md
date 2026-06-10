@@ -34,7 +34,19 @@ npm run dev
 | `npm run dev` | 開發伺服器 |
 | `npm run build` | 建置至 `dist/` |
 | `npm run preview` | 預覽建置結果 |
-| `npm run ppt` | 產生專題簡報 PPTX（20 頁） |
+| `npm run ppt` | 產生專題簡報 PPTX |
+| `npm run test:ci` | 驗證反應鍵、產物保留、公式等（CI 用） |
+| `npm run release -- -Message "訊息"` | 測試 → 建置 → commit → push → 自動部署 Pages |
+
+## 反應更動規範
+
+凡更動會依條件影響反應行為（產物保留、火柴檢驗、動畫等），須：
+
+1. 優先改共用邏輯（`postReactionBeaker.js`、`useLabState.js` 等）
+2. 掃描**所有**符合條件的手動與生成反應
+3. 執行 `npm run test:ci` 通過後，以 `npm run release` 推送至 GitHub
+
+詳見 `AGENTS.md` 與 `.cursor/rules/reaction-rollout-deploy.mdc`。
 
 ## 上傳到 GitHub
 

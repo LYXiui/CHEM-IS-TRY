@@ -45,7 +45,6 @@ export default function App() {
             onAccelerate={lab.accelerateTimer}
             onPour={lab.addCompoundToBeaker}
             onMix={() => lab.runReaction('mix')}
-            onBurn={() => lab.runReaction('burn')}
             onClear={lab.clearBeaker}
             onContextMenu={showIntro}
             labAnimation={lab.labAnimation}
@@ -53,6 +52,7 @@ export default function App() {
             itemAnims={lab.itemAnims}
             reactionBusy={lab.reactionBusy}
             reactionSnapshot={lab.reactionSnapshot}
+            processLog={lab.processLog}
           >
             <PeriodicTable
               embedded

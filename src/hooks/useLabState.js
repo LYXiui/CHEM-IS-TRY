@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { compoundById, compounds, stockCompounds } from '../data/compounds'
+import { compoundById, compounds, stockCompounds } from '../data/compounds.js'
 import { elementBySymbol } from '../data/elements'
 import { findImagination, getReaction, reactionKey } from '../data/reactions'
 import {
@@ -10,6 +10,11 @@ import {
   isBleachFade,
   resolveLiquidColorFromBeaker,
 } from '../utils/reactionAnim'
+import { buildPostReactionBeaker } from '../utils/postReactionBeaker.js'
+import {
+  buildVerificationAnimation,
+  shouldUseVerificationAnim,
+} from '../utils/verificationAnim.js'
 
 const STORAGE_KEY = 'chem-is-try-notebook-v6'
 const STOCK_IDS = stockCompounds.map((c) => c.id)
@@ -41,6 +46,25 @@ function upsertNotebookEntry(entries, entry) {
   return [entry, ...rest].slice(0, 50)
 }
 
+const REACTION_START_MARKERS = ['開始混合實驗', '開始燃燒實驗', '開始火柴檢驗']
+
+/** 反應開始前的準備步驟（與筆記本「實驗過程」開頭一致） */
+function extractPrepSteps(processLog) {
+  if (!processLog?.length) return []
+  let cut = processLog.length
+  for (let i = 0; i < processLog.length; i++) {
+    const t = processLog[i].text
+    if (
+      REACTION_START_MARKERS.some((m) => t.startsWith(m))
+      || t.startsWith('觀察到變化')
+    ) {
+      cut = i
+      break
+    }
+  }
+  return processLog.slice(0, cut).map((s) => ({ ...s }))
+}
+
 export function useLabState() {
   const [beakerPlaced, setBeakerPlaced] = useState(false)
   const [beaker, setBeaker] = useState([])
@@ -65,6 +89,7 @@ export function useLabState() {
   const [labAnimation, setLabAnimation] = useState(null)
   const [solutionTint, setSolutionTint] = useState(null)
   const [itemAnims, setItemAnims] = useState({})
+  const [processLog, setProcessLog] = useState([])
 
   const timerRef = useRef(null)
   const animTimerRef = useRef(null)
@@ -74,6 +99,7 @@ export function useLabState() {
   const snapshotRef = useRef(null)
   const processLogRef = useRef([])
   const unlockedRef = useRef(unlocked)
+  const handleMatchToolRef = useRef(() => {})
 
   useEffect(() => {
     unlockedRef.current = unlocked
@@ -108,13 +134,19 @@ export function useLabState() {
     }
   }, [])
 
-  const logStep = useCallback((text) => {
-    processLogRef.current = [...processLogRef.current, { time: new Date().toISOString(), text }]
+  const syncProcessLog = useCallback((steps) => {
+    processLogRef.current = steps
+    setProcessLog(steps)
   }, [])
 
+  const logStep = useCallback((text) => {
+    const next = [...processLogRef.current, { time: new Date().toISOString(), text }]
+    syncProcessLog(next)
+  }, [syncProcessLog])
+
   const resetProcessLog = useCallback(() => {
-    processLogRef.current = []
-  }, [])
+    syncProcessLog([])
+  }, [syncProcessLog])
 
   const triggerAnim = useCallback((payload, duration = 3000) => {
     if (animTimerRef.current) clearTimeout(animTimerRef.current)
@@ -131,6 +163,24 @@ export function useLabState() {
       if (a) triggerAnim(a, a.duration)
     },
     [triggerAnim],
+  )
+
+  const playReactionAnim = useCallback(
+    (r, mode, durationMs) => {
+      if (shouldUseVerificationAnim(r, mode)) {
+        const a = buildVerificationAnimation(r, mode, durationMs)
+        if (a) {
+          triggerAnim(a, a.duration)
+          return
+        }
+      }
+      playEffectsAnim(r.effects, r.effectColor, durationMs, {
+        imagination: r.imagination,
+        phenomenon: r.phenomenon,
+        compoundId: r.compoundId,
+      })
+    },
+    [triggerAnim, playEffectsAnim],
   )
 
   const scheduleSolutionTint = useCallback((color, delayMs = 0) => {
@@ -229,15 +279,7 @@ export function useLabState() {
       return
     }
     if (id === 'match') {
-      setMatchOnBench(true)
-      setMatchLit((v) => !v)
-      if (!matchLit) {
-        triggerAnim({ effects: ['flame'] }, 2000)
-        logStep('取出火柴並劃燃（供燃燒實驗）')
-      } else {
-        logStep('熄滅火柴')
-      }
-      setLastAction(matchLit ? '熄滅火柴' : '火柴已點燃')
+      handleMatchToolRef.current()
       return
     }
     if (id === 'lid') {
@@ -393,7 +435,14 @@ export function useLabState() {
     const entry = {
       id: r.compoundId,
       time: new Date().toISOString(),
-      note: mode === 'burn' ? '燃燒實驗' : lampOn ? '混合實驗（加熱）' : '混合實驗',
+      note:
+        mode === 'matchTest'
+          ? '火柴檢驗'
+          : mode === 'burn'
+            ? '燃燒實驗'
+            : lampOn
+              ? '混合實驗（加熱）'
+              : '混合實驗',
       snapshot: snap,
       processLog: [...processLogRef.current],
       resultName: c?.name,
@@ -401,122 +450,280 @@ export function useLabState() {
       reactionKey: snap?.items?.length ? `${reactionKey(snap.items)}:${mode}` : `${r.compoundId}:${mode}`,
     }
 
-    setUnlocked((prev) => {
-      const next =
-        !STOCK_IDS.includes(r.compoundId) && !prev.includes(r.compoundId)
-          ? [...prev, r.compoundId]
-          : prev
-      unlockedRef.current = next
+    if (r.observeOnly) {
       setNotebook((nb) => {
         const n2 = upsertNotebookEntry(nb, entry)
-        persist(next, n2)
+        persist(unlockedRef.current, n2)
         return n2
       })
-      return next
-    })
+    } else {
+      setUnlocked((prev) => {
+        const next =
+          !STOCK_IDS.includes(r.compoundId) && !prev.includes(r.compoundId)
+            ? [...prev, r.compoundId]
+            : prev
+        unlockedRef.current = next
+        setNotebook((nb) => {
+          const n2 = upsertNotebookEntry(nb, entry)
+          persist(next, n2)
+          return n2
+        })
+        return next
+      })
+    }
 
     setLastAction(`完成：${c?.name}`)
-    setBubble(r.imagination || null)
-    setBeaker([])
-    setBeakerPlaced(false)
+
+    if (mode === 'matchTest') {
+      setBeaker((prev) => {
+        const next = prev.filter((x) => !(x.type === 'compound' && x.id === r.compoundId))
+        setBeakerPlaced(
+          next.some((x) => x.type === 'compound' && compoundById[x.id]?.liquid)
+          || next.length > 0,
+        )
+        return next
+      })
+      setBubble(r.imagination || null)
+    } else {
+      const { items: postItems, needsBeaker } = buildPostReactionBeaker(
+        r,
+        mode,
+        snap?.items || [],
+      )
+      if (postItems.length > 0) {
+        setBeaker(postItems)
+        setBeakerPlaced(needsBeaker)
+        logStep(`產物留在實驗台（${postItems.length} 種），可進行後續檢驗或混合`)
+        const followHint = r.imagination
+          || (postItems.some((x) => x.id === 'co2')
+            ? '可點火柴（劃燃後再點）檢驗 CO₂'
+            : postItems.some((x) => x.id === 'h2')
+              ? '可點火柴（劃燃後再點）檢驗 H₂'
+              : postItems.some((x) => x.id === 'o2')
+                ? '可點火柴（劃燃後再點）檢驗 O₂ 助燃'
+                : '產物已保留，可繼續實驗')
+        setBubble(followHint)
+      } else {
+        setBeaker([])
+        setBeakerPlaced(false)
+        setBubble(r.imagination || null)
+      }
+    }
+
     setSelectedIndex(null)
     setLidOn(false)
-    setMatchLit(false)
+    if (mode === 'matchTest') {
+      if (r.matchResult === 'extinguish') setMatchLit(false)
+      else if (r.matchResult === 'intensify' || r.matchResult === 'ignite') setMatchLit(true)
+      else setMatchLit(false)
+    } else {
+      setMatchLit(false)
+    }
     snapshotRef.current = null
     resetProcessLog()
   }
 
-  const runReaction = (mode) => {
-    if (reactionBusy) return
-    if (beaker.length === 0) {
-      setBubble('請先從週期表選取元素，或於燒杯中放入試劑')
-      return
-    }
-    if (beakerHasLiquid() && !beakerPlaced) {
-      setBubble('燒杯內有液體，請先放置燒杯')
-      return
-    }
-    if (beakerPlaced && lidOn) {
-      setBubble('請先打開杯蓋')
-      return
-    }
+  const itemsNeedBeaker = (items) =>
+    items.some(
+      (x) =>
+        (x.type === 'compound' && compoundById[x.id]?.liquid)
+        || (x.type === 'element' && elementBySymbol[x.symbol]?.state === 'liquid'),
+    )
 
-    if (mode === 'burn') {
-      if (!matchLit) {
-        setBubble('燃燒實驗：請先劃燃火柴')
-        return
+  const beginReaction = useCallback(
+    (items, mode, opts = {}) => {
+      const {
+        lampOn: lamp = lampOn,
+        matchLit: match = matchLit,
+        placed = beakerPlaced,
+      } = opts
+
+      if (reactionBusy) return false
+      if (!items.length) {
+        setBubble('請先從週期表選取元素，或於燒杯中放入試劑')
+        return false
       }
-    } else {
-      const items = [...beaker]
-      const preview = getReaction(items, 'mix')
-      if (preview?.needsHeat && !lampOn) {
-        setBubble('此混合反應需加熱：請先點燃酒精燈')
-        return
+      if (itemsNeedBeaker(items) && !placed) {
+        setBubble('燒杯內有液體，請先放置燒杯')
+        return false
       }
-    }
-
-    const items = [...beaker]
-    const r = getReaction(items, mode)
-
-    if (!processLogRef.current.length) {
-      logStep(mode === 'burn' ? '開始燃燒實驗' : '開始混合實驗')
-    }
-    if (mode === 'burn') logStep('火柴引燃物質')
-    if (mode === 'mix' && lampOn) logStep('酒精燈加熱中')
-    if (tools.stir) logStep('攪拌棒攪拌')
-    if (tools.filter) logStep('過濾器過濾')
-    if (tools.separator) logStep('分離器分層')
-
-    if (r?.compoundId) {
-      snapshotRef.current = {
-        items: items.map((x) => ({ ...x })),
-        mode,
-        lampOn: mode === 'mix' ? lampOn : false,
-        matchLit: mode === 'burn' ? matchLit : false,
+      if (placed && lidOn) {
+        setBubble('請先打開杯蓋')
+        return false
       }
-      setReactionSnapshot(items.map((x) => ({ ...x })))
-      const wait = r.duration ?? (mode === 'burn' ? 4 : 2)
-      const waitMs = wait * 1000
-      const fxList = r.effects || []
-      const fromColor = resolveLiquidColorFromBeaker(items, null)
-      const shiftMs =
-        computeColorShiftDuration(fxList, waitMs, fromColor, r.effectColor) || waitMs + 800
-      const animMs = fxList.includes('colorChange')
-        ? Math.max(waitMs + 500, shiftMs + 350)
-        : waitMs + 800
-      playEffectsAnim(r.effects, r.effectColor, animMs, {
-        imagination: r.imagination,
-        phenomenon: r.phenomenon,
-        compoundId: r.compoundId,
-      })
-      if (wait > 0) {
-        pendingReactionRef.current = r
-        pendingModeRef.current = mode
-        setPhenomenon({ text: '反應進行中…', formula: '⏳', name: '等待' })
-        logStep('反應進行中（可碼表加速）')
-        startReactionTimer(wait, () => {
-          finishReaction(pendingReactionRef.current, pendingModeRef.current)
-          pendingReactionRef.current = null
+
+      if (mode === 'burn') {
+        if (!match) {
+          setBubble('燃燒實驗：請先劃燃火柴')
+          return false
+        }
+      } else if (mode === 'matchTest') {
+        if (!match) {
+          setBubble('火柴檢驗：請先劃燃火柴，再對燒杯內氣體檢驗')
+          return false
+        }
+      } else {
+        const preview = getReaction(items, 'mix')
+        if (preview?.needsHeat && !lamp) {
+          setBubble('此混合反應需加熱：請先點燃酒精燈')
+          return false
+        }
+      }
+
+      const r = getReaction(items, mode)
+
+      const hasReactionStart = processLogRef.current.some((s) =>
+        REACTION_START_MARKERS.some((m) => s.text.startsWith(m)),
+      )
+      if (!hasReactionStart) {
+        logStep(
+          mode === 'burn'
+            ? '開始燃燒實驗'
+            : mode === 'matchTest'
+              ? '開始火柴檢驗'
+              : '開始混合實驗',
+        )
+      }
+      if (mode === 'burn') logStep('火柴引燃物質')
+      if (mode === 'matchTest') logStep('持燃火柴伸入氣體中觀察')
+      if (mode === 'mix' && lamp) logStep('酒精燈加熱中')
+      if (tools.stir) logStep('攪拌棒攪拌')
+      if (tools.filter) logStep('過濾器過濾')
+      if (tools.separator) logStep('分離器分層')
+
+      if (r?.compoundId) {
+        snapshotRef.current = {
+          items: items.map((x) => ({ ...x })),
+          mode,
+          lampOn: mode === 'mix' ? lamp : false,
+          matchLit: mode === 'burn' || mode === 'matchTest' ? match : false,
+          beakerPlaced: placed,
+          matchOnBench,
+          tools: { ...tools },
+          processLog: processLogRef.current.map((s) => ({ ...s })),
+        }
+        setReactionSnapshot(items.map((x) => ({ ...x })))
+        const wait = r.duration ?? (mode === 'burn' ? 4 : 2)
+        const waitMs = wait * 1000
+        const fxList = r.effects || []
+        const fromColor = resolveLiquidColorFromBeaker(items, null)
+        const shiftMs =
+          computeColorShiftDuration(fxList, waitMs, fromColor, r.effectColor) || waitMs + 800
+        const animMs = fxList.includes('colorChange')
+          ? Math.max(waitMs + 500, shiftMs + 350)
+          : waitMs + 800
+        playReactionAnim(r, mode, animMs)
+        if (wait > 0) {
+          pendingReactionRef.current = r
+          pendingModeRef.current = mode
+          setPhenomenon({ text: '反應進行中…', formula: '⏳', name: '等待' })
+          logStep('反應進行中（可碼表加速）')
+          startReactionTimer(wait, () => {
+            finishReaction(pendingReactionRef.current, pendingModeRef.current)
+            pendingReactionRef.current = null
+          })
+          return true
+        }
+        finishReaction(r, mode)
+        return true
+      }
+
+      resetProcessLog()
+      const img = findImagination(items)
+      if (img) {
+        setBubble(img)
+        setPhenomenon({ text: img, formula: '—', name: '提示' })
+      } else {
+        setBubble('此組合尚無反應變化')
+        setPhenomenon(null)
+      }
+      setEffects([])
+      setEffectColor(null)
+      if (mode === 'matchTest') {
+        setBubble('燒杯內無可檢驗氣體 — 先製備 CO₂、H₂、O₂ 等（如 CaCO₃ 加熱分解）')
+        setPhenomenon({
+          text: '提示：完成放氣反應後，氣體會留在燒杯，再用火柴檢驗',
+          formula: '—',
+          name: '火柴檢驗',
         })
-        return
       }
-      finishReaction(r, mode)
+      setLastAction(
+        mode === 'burn'
+          ? '燃燒 — 無變化'
+          : mode === 'matchTest'
+            ? '火柴檢驗 — 無可檢氣體'
+            : '混合 — 無變化',
+      )
+      return false
+    },
+    [
+      reactionBusy,
+      beakerPlaced,
+      lidOn,
+      lampOn,
+      matchLit,
+      tools,
+      logStep,
+      playReactionAnim,
+      startReactionTimer,
+      finishReaction,
+    ],
+  )
+
+  const runReaction = (mode) => {
+    beginReaction([...beaker], mode)
+  }
+
+  const resolveMatchAction = (items) => {
+    const testR = getReaction(items, 'matchTest')
+    const burnR = getReaction(items, 'burn')
+    if (testR?.compoundId && burnR?.compoundId) {
+      const hasFuelGas = items.some(
+        (x) => x.type === 'compound' && ['ch4', 'c2h5oh'].includes(x.id),
+      )
+      const hasOxidizer = items.some(
+        (x) => (x.type === 'element' && x.symbol === 'O') || (x.type === 'compound' && x.id === 'o2'),
+      )
+      if (hasFuelGas && hasOxidizer) return 'burn'
+      return 'matchTest'
+    }
+    if (testR?.compoundId) return 'matchTest'
+    if (burnR?.compoundId) return 'burn'
+    return null
+  }
+
+  const handleMatchTool = useCallback(() => {
+    if (reactionBusy) return
+    setMatchOnBench(true)
+
+    if (!matchLit) {
+      setMatchLit(true)
+      logStep('取出火柴並劃燃')
+      const action = resolveMatchAction(beaker)
+      setBubble(
+        action === 'matchTest'
+          ? '火柴已點燃：再點一次火柴可檢驗氣體'
+          : action === 'burn'
+            ? '火柴已點燃：再點一次火柴可進行燃燒實驗'
+            : '火柴已點燃：再點一次火柴可燃燒或檢驗氣體（請先放入反應物）',
+      )
+      setLastAction('火柴已點燃')
       return
     }
 
-    resetProcessLog()
-    const img = findImagination(items)
-    if (img) {
-      setBubble(img)
-      setPhenomenon({ text: img, formula: '—', name: '提示' })
-    } else {
-      setBubble('此組合尚無反應變化')
-      setPhenomenon(null)
+    const mode = resolveMatchAction(beaker)
+    if (mode) {
+      beginReaction([...beaker], mode, { matchLit: true })
+      return
     }
-    setEffects([])
-    setEffectColor(null)
-    setLastAction(mode === 'burn' ? '燃燒 — 無變化' : '混合 — 無變化')
-  }
+
+    setMatchLit(false)
+    logStep('熄滅火柴')
+    setLastAction('熄滅火柴')
+    setBubble(null)
+  }, [reactionBusy, matchLit, beaker, logStep, beginReaction])
+
+  handleMatchToolRef.current = handleMatchTool
 
   const accelerateAndFinish = () => {
     if (!reactionBusy) return
@@ -548,18 +755,46 @@ export function useLabState() {
       return n2
     })
 
+    if (animTimerRef.current) clearTimeout(animTimerRef.current)
+    if (tintTimerRef.current) clearTimeout(tintTimerRef.current)
     stopTimer()
-    resetProcessLog()
-    const hasLiquid = latest.snapshot.items.some((x) => x.type === 'compound')
-    setBeakerPlaced(hasLiquid)
-    setBeaker(latest.snapshot.items.map((x) => ({ ...x })))
-    setLampOn(!!latest.snapshot.lampOn)
-    setMatchLit(!!latest.snapshot.matchLit)
+    pendingReactionRef.current = null
+    setLabAnimation(null)
+    setReactionSnapshot(null)
+    setSolutionTint(null)
+    setItemAnims({})
+
+    const snap = latest.snapshot
+    const items = snap.items.map((x) => ({ ...x }))
+    const placed =
+      snap.beakerPlaced != null
+        ? snap.beakerPlaced
+        : items.some((x) => x.type === 'compound') || itemsNeedBeaker(items)
+    const snapLamp = !!snap.lampOn
+    const snapMatch = !!snap.matchLit
+    const snapMatchOnBench = snap.matchOnBench ?? snapMatch
+    const snapTools = snap.tools ?? { stir: false, filter: false, separator: false, cooler: false }
+
+    const prepSteps = snap.processLog?.length
+      ? snap.processLog.map((s) => ({ ...s }))
+      : extractPrepSteps(latest.processLog || [])
+    syncProcessLog(prepSteps)
+
+    setBeakerPlaced(!!placed)
+    setBeaker(items)
+    setLampOn(snapLamp)
+    setMatchLit(snapMatch)
+    setMatchOnBench(snapMatchOnBench)
+    setTools(snapTools)
     setLidOn(false)
     setSelectedIndex(null)
     resetFeedback()
-    setLastAction(`重現：${latest.resultFormula || latest.id}`)
-    setBubble('已還原實驗條件，可再次操作')
+    setLastAction(`已還原實驗條件：${latest.resultFormula || latest.id}`)
+    setBubble(
+      prepSteps.length
+        ? '已還原實驗條件與準備步驟，請自行操作（混合或點火柴）再重做實驗'
+        : '已還原實驗條件，請自行操作（混合或點火柴）再重做實驗',
+    )
   }
 
   return {
@@ -589,6 +824,7 @@ export function useLabState() {
     labAnimation,
     solutionTint,
     itemAnims,
+    processLog,
     toggleBeaker,
     toggleTool,
     accelerateTimer: accelerateAndFinish,

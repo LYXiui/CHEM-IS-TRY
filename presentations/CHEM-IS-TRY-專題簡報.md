@@ -74,21 +74,7 @@ style: |
 
 ---
 
-# 2. 技術一覽（18 項運用）
-
-| 類別 | 技術 | 專案中用途 |
-|------|------|------------|
-| 標記 | HTML5 | 語意結構、`index.html` 進入點 |
-| 樣式 | CSS3 | 動畫、漸層、Flex／Grid 版面 |
-| 腳本 | JavaScript ES6+ | 模組、箭頭函式、解構、展開運算 |
-| 框架 | React 19 | 元件化 UI、Hooks 狀態 |
-| 建置 | Vite 6 | 開發伺服器、打包 `dist/` |
-| 樣式庫 | Tailwind CSS 4 | 快速排版與響應式 |
-| 儲存 | localStorage | 實驗筆記持久化 |
-
----
-
-# 3. HTML5 語意結構
+# 2. HTML5 語意結構
 
 **重點：** 語意標籤、文件結構、可存取性
 
@@ -105,7 +91,7 @@ style: |
 
 ---
 
-# 4. JavaScript ES6+ 模組化
+# 3. JavaScript ES6+ 模組化
 
 **重點：** `import` / `export`、箭頭函式、樣板字串
 
@@ -124,7 +110,7 @@ export function reactionKey(items) { ... }
 
 ---
 
-# 5. React — 元件化設計
+# 4. React — 元件化設計
 
 **重點：** 函式元件、JSX、元件樹、重用
 
@@ -143,7 +129,7 @@ App
 
 ---
 
-# 6. React Hooks — useState
+# 5. React Hooks — useState
 
 **重點：** 函式元件中的區域狀態
 
@@ -159,7 +145,7 @@ const [lampOn, setLampOn] = useState(false)
 
 ---
 
-# 7. React Hooks — useEffect
+# 6. React Hooks — useEffect
 
 **重點：** 副作用、生命週期、依賴陣列
 
@@ -178,7 +164,7 @@ useEffect(() => () => clearInterval(timerRef.current), [])
 
 ---
 
-# 8. React Hooks — useCallback / useRef
+# 7. React Hooks — useCallback / useRef
 
 **重點：** 效能優化、跨渲染保存值
 
@@ -195,7 +181,7 @@ processLogRef.current.push({ text: '加入元素 Na' })
 
 ---
 
-# 9. Props 與事件處理
+# 8. Props 與事件處理
 
 **重點：** 父子通訊、合成事件
 
@@ -213,7 +199,7 @@ processLogRef.current.push({ text: '加入元素 Na' })
 
 ---
 
-# 10. Vite 6 建置工具
+# 9. Vite 6 建置工具
 
 | 指令 | 意義 |
 |------|------|
@@ -230,7 +216,7 @@ base: process.env.VITE_BASE || '/'
 
 ---
 
-# 11. Tailwind CSS 4
+# 10. Tailwind CSS 4
 
 **重點：** Utility-first、與建置流程整合
 
@@ -250,7 +236,7 @@ base: process.env.VITE_BASE || '/'
 
 ---
 
-# 12. 資料驅動 UI（反應引擎）
+# 11. 資料驅動 UI（反應引擎）
 
 **重點：** 資料與畫面分離、查表法
 
@@ -272,7 +258,7 @@ export function getReaction(items, mode) {
 
 ---
 
-# 13. Web API — localStorage
+# 12. Web API — localStorage
 
 **重點：** 瀏覽器儲存、JSON 序列化
 
@@ -289,7 +275,7 @@ localStorage.setItem(STORAGE_KEY, JSON.stringify({
 
 ---
 
-# 14. 自訂 Hook 與模組拆分
+# 13. 自訂 Hook 與模組拆分
 
 **重點：** 邏輯重用、關注點分離
 
@@ -304,7 +290,7 @@ localStorage.setItem(STORAGE_KEY, JSON.stringify({
 
 ---
 
-# 15. 專案目錄結構
+# 14. 專案目錄結構
 
 ```
 CHEM-IS-TRY/
@@ -323,7 +309,7 @@ CHEM-IS-TRY/
 
 ---
 
-# 16. 建置與簡報
+# 15. 建置與簡報
 
 ```bash
 npm install
@@ -336,7 +322,7 @@ npm run ppt      # 產生本簡報 PPTX
 
 ---
 
-# 17. 線上體驗 CHEM-IS-TRY
+# 16. 線上體驗 CHEM-IS-TRY
 
 <div style="display:flex;align-items:center;gap:2.5rem;margin-top:0.5rem;">
 
@@ -369,4 +355,4 @@ npm run ppt      # 產生本簡報 PPTX
 
 # CHEM-IS-TRY
 
-網頁程式設計 · 共 19 頁
+網頁程式設計 · 共 18 頁

@@ -12,6 +12,14 @@ export const reactionCatalog = [
   /* 2 分解 */
   { cat: 2, name: '電解／加熱分解水', items: [{ type: 'compound', id: 'h2o' }], mode: 'mix', key: 'c:h2o', needsLamp: true },
   { cat: 2, name: 'CaCO₃高溫分解', items: [{ type: 'compound', id: 'caco3' }], mode: 'mix', key: 'c:caco3', needsLamp: true },
+  { cat: 9, name: '火柴檢驗 CO₂（分解後）', items: [{ type: 'compound', id: 'cao' }, { type: 'compound', id: 'co2' }], mode: 'matchTest', key: 'c:cao+c:co2', note: '先加熱 CaCO₃，再劃燃火柴' },
+  { cat: 9, name: '火柴檢驗 CO₂', items: [{ type: 'compound', id: 'co2' }], mode: 'matchTest', key: 'c:co2' },
+  { cat: 9, name: '火柴檢驗 H₂', items: [{ type: 'compound', id: 'h2' }], mode: 'matchTest', key: 'c:h2' },
+  { cat: 9, name: '火柴檢驗 O₂', items: [{ type: 'compound', id: 'o2' }], mode: 'matchTest', key: 'c:o2' },
+  { cat: 9, name: '石灰水檢驗 CO₂', items: [{ type: 'compound', id: 'caoh2_aq' }, { type: 'compound', id: 'co2' }], mode: 'mix', key: 'c:caoh2_aq+c:co2', note: '需燒杯' },
+  { cat: 9, name: '石蕊遇酸', items: [{ type: 'compound', id: 'litmus' }, { type: 'compound', id: 'hcl' }], mode: 'mix', key: 'c:litmus+c:hcl', note: '需燒杯' },
+  { cat: 9, name: '石蕊遇鹼', items: [{ type: 'compound', id: 'litmus' }, { type: 'compound', id: 'naoh' }], mode: 'mix', key: 'c:litmus+c:naoh', note: '需燒杯' },
+  { cat: 9, name: '酚酞遇鹼', items: [{ type: 'compound', id: 'phenolphthalein' }, { type: 'compound', id: 'naoh' }], mode: 'mix', key: 'c:phenolphthalein+c:naoh', note: '需燒杯' },
   /* 3 置換 */
   { cat: 3, name: 'Zn+鹽酸', items: ['Zn', { type: 'compound', id: 'hcl' }], mode: 'mix', key: 'Zn+c:hcl' },
   { cat: 3, name: 'Zn+稀硫酸', items: ['Zn', { type: 'compound', id: 'h2so4_dil' }], mode: 'mix', key: 'Zn+c:h2so4_dil' },

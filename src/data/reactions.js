@@ -1,5 +1,6 @@
 import { manualReactions } from './manualReactions.js'
 import { generatedElementReactions } from './generated/elementReactions.js'
+import { findMatchTest } from './matchTestReactions.js'
 
 /** 自動生成 + 手動反應（手動優先） */
 export const reactions = {
@@ -35,6 +36,9 @@ export function findImagination(items) {
 }
 
 export function getReaction(items, mode = 'mix') {
+  if (mode === 'matchTest') {
+    return findMatchTest(items)
+  }
   const key = reactionKey(items)
   const r = reactions[key]
   if (!r) return null

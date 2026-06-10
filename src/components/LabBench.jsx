@@ -138,7 +138,6 @@ export default function LabBench({
   onAccelerate,
   onPour,
   onMix,
-  onBurn,
   onClear,
   onContextMenu,
   labAnimation,
@@ -146,12 +145,17 @@ export default function LabBench({
   itemAnims,
   reactionBusy,
   reactionSnapshot,
+  processLog = [],
   children,
 }) {
   const [reagentExpanded, setReagentExpanded] = useState(false)
 
   const fx = labAnimation?.effects || []
-  const isAnimating = reactionBusy || fx.length > 0 || labAnimation?.type === 'solutionShift'
+  const isAnimating =
+    reactionBusy
+    || fx.length > 0
+    || labAnimation?.type === 'solutionShift'
+    || labAnimation?.type === 'verification'
   const showResultIdle =
     !isAnimating && !!phenomenon && beaker.length === 0 && !beakerPlaced
 
@@ -227,7 +231,13 @@ export default function LabBench({
               燒杯已放置，可傾倒溶液或加入元素
             </p>
           ) : !isAnimating && beaker.length > 0 ? (
-            <div className="flex flex-wrap gap-2 justify-center relative z-10">
+            <div className="relative z-10 space-y-2">
+              {phenomenon && (
+                <p className="text-xs text-center text-emerald-700 font-medium">
+                  產物已留在實驗台 — 可點火柴檢驗、傾倒石灰水／指示劑，或再混合
+                </p>
+              )}
+              <div className="flex flex-wrap gap-2 justify-center">
               {beaker.map((item, i) => (
                 <button
                   key={`${i}-${item.type === 'compound' ? item.id : item.symbol}`}
@@ -247,6 +257,7 @@ export default function LabBench({
                   <ElementIcon item={item} size="sm" />
                 </button>
               ))}
+              </div>
             </div>
           ) : null}
         </div>
@@ -254,9 +265,6 @@ export default function LabBench({
         <div className="flex flex-wrap gap-2 mt-3 justify-center">
           <button type="button" className="btn-game btn-mix" onClick={onMix}>
             ⚗️ 混合
-          </button>
-          <button type="button" className="btn-game btn-burn" onClick={onBurn}>
-            🔥 燃燒
           </button>
           <button type="button" className="btn-game btn-remove" onClick={onRemove}>
             ✕ 移除選取
@@ -268,9 +276,21 @@ export default function LabBench({
 
       </div>
 
-      {(phenomenon || bubble || lastAction) && (
+      {(processLog.length > 0 || phenomenon || bubble || lastAction) && (
         <div className="lab-report-panel">
           <h3 className="lab-report-heading">實驗報告</h3>
+          {processLog.length > 0 && (
+            <div className="lab-process-steps">
+              <p className="lab-process-steps-title">實驗步驟</p>
+              <ul className="lab-process-steps-list">
+                {processLog.map((s, i) => (
+                  <li key={`${s.time}-${i}`} className="lab-process-step">
+                    {s.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {phenomenon && (
             <div className="lab-report">
               <div className="lab-report-title">

@@ -1,6 +1,6 @@
 CHEM-IS-TRY — 可展示化學式一覽（自動產生）
 ================================================
-產生時間：2026-06-05
+產生時間：2026-06-10
 資料來源：docbrown.info、chem.fsu.edu、Pearson、Shiksha Class 10、專案 compounds/reactions
 驗證：npm run test:formulas
 
@@ -88,8 +88,8 @@ CHEM-IS-TRY — 可展示化學式一覽（自動產生）
 ✓  Fe(OH)₂         氫氧化亞鐵         反應可解鎖
 
 ────────────────────────────────────────
-統計：可用 55、參考未實作 1、錯誤 0；專案化合物 508 種
-內建反應鍵：631 組
+統計：可用 55、參考未實作 1、錯誤 0；專案化合物 509 種
+內建反應鍵：639 組
 
 網站參考：
 - https://www.docbrown.info/page03/AcidsBasesSalts08.htm

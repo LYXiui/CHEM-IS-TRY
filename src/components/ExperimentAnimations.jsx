@@ -1,5 +1,6 @@
 /** 實驗台現象動畫 — BEAKER 風格燒杯內反應 */
 import BeakerReactionStage, { resolveLiquidLevel } from './BeakerReactionStage'
+import VerificationStage from './VerificationStage'
 import {
   isBleachFade,
   resolveBeakerVisuals,
@@ -13,8 +14,11 @@ export default function ExperimentAnimations({
   reactionBusy = false,
   itemAnims,
 }) {
+  const isVerification = anim?.type === 'verification'
   const fx = anim?.effects || []
-  const showBeakerStage = reactionBusy || fx.length > 0 || anim?.type === 'solutionShift'
+  const showBeakerStage =
+    !isVerification && (reactionBusy || fx.length > 0 || anim?.type === 'solutionShift')
+  const showVerification = isVerification && (reactionBusy || !!anim?.kind)
 
   const stageAnim =
     anim?.type === 'solutionShift'
@@ -46,6 +50,10 @@ export default function ExperimentAnimations({
 
   return (
     <>
+      {showVerification && (
+        <VerificationStage anim={anim} active={reactionBusy || !!anim?.kind} />
+      )}
+
       {showBeakerStage && (
         <BeakerReactionStage
           anim={mergedAnim}
