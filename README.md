@@ -2,6 +2,8 @@
 
 網頁版虛擬化學實驗台 — 在瀏覽器安全地探索週期表、溶液反應與實驗動畫。
 
+**線上體驗：** https://lyxiui.github.io/CHEM-IS-TRY/
+
 ![React](https://img.shields.io/badge/React-19-61dafb)
 ![Vite](https://img.shields.io/badge/Vite-6-646cff)
 ![License](https://img.shields.io/badge/License-MIT-green)
@@ -58,7 +60,9 @@ git push -u origin main
 base: '/CHEM-IS-TRY/',
 ```
 
-2. 推送後至 GitHub → Settings → Pages → Source 選 **GitHub Actions**
+2. 首次需啟用 Pages（擇一）：
+   - GitHub → **Settings → Pages → Build and deployment → Source** 選 **GitHub Actions**
+   - 或執行：`gh api -X POST repos/你的帳號/CHEM-IS-TRY/pages -f build_type=workflow`
 
 或手動建置：
 
